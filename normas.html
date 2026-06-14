@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Normas — Porra Mundial 2026</title>
+  <style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background-color: #0d1b2a;
+    color: #e2e8f0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 50%, #7c2d12 100%);
+    padding: 24px 20px 18px;
+    text-align: center;
+    border-bottom: 3px solid #f59e0b;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+  header h1 {
+    font-size: clamp(1.4rem, 4vw, 2.2rem);
+    color: #fbbf24;
+    letter-spacing: 2px;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+    font-weight: 900;
+  }
+  header p.subtitulo {
+    color: #fca5a5;
+    font-size: 0.85rem;
+    margin-top: 4px;
+    letter-spacing: 1px;
+  }
+
+  /* ── NAV ── */
+  nav {
+    background-color: #1e293b;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    border-bottom: 2px solid #334155;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+  }
+  nav a {
+    color: #cbd5e1;
+    text-decoration: none;
+    padding: 14px 22px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+    transition: background 0.2s, color 0.2s;
+    border-bottom: 3px solid transparent;
+  }
+  nav a:hover, nav a.activo {
+    color: #fbbf24;
+    background-color: #0f172a;
+    border-bottom-color: #f59e0b;
+  }
+
+  /* ── MAIN ── */
+  main {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 32px 16px;
+    flex: 1;
+    width: 100%;
+  }
+
+  h2 {
+    font-size: 1.4rem;
+    color: #fbbf24;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #334155;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  /* ── TABLAS ── */
+  .tabla-wrapper {
+    overflow-x: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #1e293b;
+    font-size: 0.92rem;
+  }
+  thead tr {
+    background: linear-gradient(90deg, #991b1b, #b91c1c);
+  }
+  th {
+    color: #fff;
+    padding: 13px 12px;
+    text-align: center;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  th.col-nombre { text-align: left; }
+  td {
+    padding: 11px 12px;
+    border-bottom: 1px solid #2d3f55;
+    text-align: center;
+    vertical-align: middle;
+  }
+  td.col-nombre { text-align: left; font-weight: 600; }
+  tr:hover td { background-color: #263347; }
+  tr:last-child td { border-bottom: none; }
+
+  /* Fila del TOP 3 */
+  tr.pos-1 td { background-color: rgba(251,191,36,0.12); }
+  tr.pos-2 td { background-color: rgba(148,163,184,0.10); }
+  tr.pos-3 td { background-color: rgba(180,120,80,0.10); }
+  tr.pos-1:hover td { background-color: rgba(251,191,36,0.18); }
+  tr.pos-2:hover td { background-color: rgba(148,163,184,0.15); }
+  tr.pos-3:hover td { background-color: rgba(180,120,80,0.15); }
+
+  /* Celda TOTAL destacada */
+  td.total { font-weight: 800; font-size: 1.05rem; color: #fbbf24; }
+  td.total-cero { color: #64748b; }
+
+  /* ── TARJETAS PARTICIPANTE ── */
+  .grid-participantes {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+    margin-top: 10px;
+  }
+  .card-participante {
+    background: linear-gradient(135deg, #1e293b, #263347);
+    border: 1px solid #334155;
+    border-radius: 12px;
+    padding: 20px 16px;
+    text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .card-participante:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
+  .card-participante a {
+    color: #fbbf24;
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+  .card-participante.sin-porra { opacity: 0.55; }
+  .card-participante.sin-porra span { color: #94a3b8; font-size: 1.05rem; font-weight: 600; }
+  .card-participante .puntos-card {
+    font-size: 2rem;
+    font-weight: 900;
+    color: #fbbf24;
+    line-height: 1;
+    margin: 6px 0 2px;
+  }
+  .card-participante .label-pts { font-size: 0.7rem; color: #64748b; letter-spacing: 1px; text-transform: uppercase; }
+  .card-participante .badge-pos {
+    display: inline-block;
+    font-size: 1.3rem;
+    margin-bottom: 4px;
+  }
+  .tag-pendiente {
+    display: inline-block;
+    background-color: #334155;
+    color: #94a3b8;
+    font-size: 0.7rem;
+    border-radius: 4px;
+    padding: 2px 6px;
+    margin-top: 6px;
+    letter-spacing: 0.5px;
+  }
+
+  /* ── SECCIÓN PORRA INDIVIDUAL ── */
+  .seccion-porra {
+    margin-bottom: 36px;
+  }
+  .seccion-porra h3 {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #f59e0b;
+    padding: 8px 14px;
+    background-color: #1a2a3a;
+    border-left: 4px solid #f59e0b;
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 12px;
+  }
+  .tabla-partidos th { font-size: 0.72rem; }
+  .tabla-partidos td { font-size: 0.85rem; padding: 8px 10px; }
+  .resultado-1  { color: #86efac; font-weight: 700; }
+  .resultado-x  { color: #fbbf24; font-weight: 700; }
+  .resultado-2  { color: #f87171; font-weight: 700; }
+  .grupo-badge {
+    display: inline-block;
+    font-size: 0.7rem;
+    background: #334155;
+    border-radius: 4px;
+    padding: 1px 5px;
+    color: #94a3b8;
+  }
+
+  .tabla-fase th, .tabla-fase td { padding: 9px 12px; }
+  .tabla-cuestiones .respuesta-si  { color: #86efac; font-weight: 700; }
+  .tabla-cuestiones .respuesta-no  { color: #f87171; font-weight: 700; }
+
+  .tabla-varios td:first-child { text-align: left; color: #94a3b8; font-size: 0.82rem; }
+  .tabla-varios td.valor { color: #e2e8f0; font-weight: 600; text-align: left; }
+
+  /* ── PARTIDOS (resultados.html) ── */
+  .filtro-grupo {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+    justify-content: center;
+  }
+  .btn-filtro {
+    background: #1e293b;
+    border: 1px solid #334155;
+    color: #94a3b8;
+    padding: 6px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-family: inherit;
+    transition: all 0.2s;
+  }
+  .btn-filtro:hover, .btn-filtro.activo {
+    background: #991b1b;
+    border-color: #f59e0b;
+    color: #fbbf24;
+  }
+  .partido-pendiente { color: #475569; font-style: italic; }
+  .partido-jugado { color: #86efac; font-weight: 600; }
+  .resultado-partido { font-size: 1rem; font-weight: 800; color: #fbbf24; letter-spacing: 1px; }
+  .fase-header {
+    background: linear-gradient(90deg, #1a2a3a, #1e293b);
+    color: #f59e0b;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 8px 14px;
+    border-left: 3px solid #f59e0b;
+    margin: 24px 0 10px;
+    border-radius: 0 6px 6px 0;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background-color: #0f172a;
+    border-top: 1px solid #1e293b;
+    text-align: center;
+    padding: 16px;
+    color: #475569;
+    font-size: 0.8rem;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 640px) {
+    nav a { padding: 12px 14px; font-size: 0.82rem; }
+    table { font-size: 0.82rem; }
+    th, td { padding: 8px 6px; }
+    main { padding: 20px 10px; }
+  }
+</style>
+</head>
+<body>
+  <header>
+    <h1>🏆 PORRA MUNDIAL 2026 🏆</h1>
+    <p class="subtitulo">USA · CANADA · MEXICO</p>
+  </header>
+  <nav>
+    <a href="index.html" class="">🏆 Clasificación</a>
+<a href="resultados.html" class="">⚽ Resultados</a>
+<a href="participantes.html" class="">👥 Participantes</a>
+<a href="normas.html" class="activo">📋 Normas</a>
+  </nav>
+  <main>
+    
+    <h2>Normas de la Porra</h2>
+    <p style="text-align:center;color:#94a3b8;font-size:0.88rem;margin-bottom:28px;">
+      Sistema de puntuación detallado para cada sección del torneo
+    </p>
+
+    <!-- Grid de secciones -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+                gap:16px;margin-bottom:36px;">
+      
+        <div style="background:#1e293b;border:1px solid #334155;border-radius:12px;
+                    padding:18px 20px;break-inside:avoid;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+            <span style="font-size:1.5rem;">⚽</span>
+            <h3 style="color:#fbbf24;font-size:0.95rem;font-weight:700;
+                       text-transform:uppercase;letter-spacing:0.5px;">1ª Fase</h3>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;
+                           padding:6px 0;border-bottom:1px solid #1e293b;gap:12px;">
+              <span style="color:#cbd5e1;font-size:0.88rem;">Un resultado por partido (1, X ó 2).</span>
+              <span style="color:#fbbf24;font-weight:700;font-size:0.9rem;white-space:nowrap;">2 pts por acierto</span>
+            </div>
+        </div>
+
+        <div style="background:#1e293b;border:1px solid #334155;border-radius:12px;
+                    padding:18px 20px;break-inside:avoid;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+            <span style="font-size:1.5rem;">🔟</span>
+            <h3 style="color:#fbbf24;font-size:0.95rem;font-weight:700;
+                       text-transform:uppercase;letter-spacing:0.5px;">Dieciseisavos de Final</h3>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;
+                           padding:6px 0;border-bottom:1px solid #1e293b;gap:12px;">
+              <span style="color:#cbd5e1;font-size:0.88rem;">Pronosticar las selecciones clasificadas.</span>
+              <span style="color:#fbbf24;font-weight:700;font-size:0.9rem;white-space:nowrap;">1 pt por selección acertada</span>
+            </div>
+<div style="display:flex;justify-content:space-between;align-items:baseline;
+                           padding:6px 0;border-bottom:1px solid #1e293b;gap:12px;">
+              <span style="color:#cbd5e1;font-size:0.88rem;">Bonus si la aciertas en la posición correcta.</span>
+              <span style="color:#fbbf24;font-weight:700;font-size:0.9rem;white-space:nowrap;">+4 ó +6 pts</span>
+            </div>
+        </div>
+
+        <div style="background:#1e293b;border:1px solid #334155;border-radius:12px;
+                    padding:18px 20px;break-inside:avoid;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+            <span style="font-size:1.5rem;">8️⃣</span>
+            <h3 style="color:#fbbf24;font-size:0.95rem;font-weight:700;
+                       text-transform:uppercase;letter-spacing:0.5px;">Octavos de Final</h3>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;
+                           padding:6px 0;border-bottom:1px solid #1e293b;gap:12px;">
+              <span style="color:#cbd5e1;font-size:0.88rem;">Pronosticar las selecciones clasificadas.</span>
+              <span style="color:#fbbf24;font-weight:700;font-size:0.9rem;white-space:nowrap;">5 pts por selección acertada</span>
+            </div>
+<div style="display:flex;justify-content:space-between;align-items:baseline;
+                           padding:6px 0;border-bottom:1px solid #1e293b;gap:12px;">
+              <span style="color:#cbd5e1;font-size:0.88rem;">Bonus si la aciertas en la posición correcta.</span>
+              <span style="color:#fbbf24;font-weight:700;font-size:0.9rem;white-space:nowrap;">+2 pts</span>
+            </div>
+        </div>
+
+        <div style="background:#1e293b;border:1px solid #334155;border-radius:12px;
+                    padding:18px 20px;break-inside:avoid;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+            <span style="font-size:1.5rem;">4️⃣</span>
+            <h3 style="color:#fbbf24;font-size:0.95rem;font-weight:700;
+                       text-transform:uppercase;letter-spacing:0.5px;">Cuartos de Final</h3>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;
+                           padding:6px 0;border-bottom:1px solid #1e293b;gap:12px;">
+              <span style="color:#cbd5e1;font-size:0.88rem;">Pronosticar las selecciones clasificadas.</span>
+              <span style="color:#fbbf24;font-weight:700;font-size:0.9rem;white-space:nowrap;">6 pts por selección acertada</span>
+            </div>
+<div style="display:flex;justify-content:space-between;align-items:baseline;
+                           padding:6px 0;border-bottom:1px solid #1e293b;gap:12px;">
+              <span style="color:#cbd5e1;font-size:0.88rem;">Bonus si la aciertas en la posición correcta.</span>
+              <span style="color:#fbbf24;font-weight:700;font-size:0.9rem;white-space:nowrap;">+3 pts</span>
+            </div>
+        </div>
+
+        <div style="background:#1e293b;border:1px solid #334155;border-radius:12px;
+                    padding:18px 20px;break-inside:avoid;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+            <span style="font-size:1.5rem;">2️⃣</span>
+            <h3 style="color:#fbbf24;font-size:0.95rem;font-weight:700;
+                       text-transform:uppercase;letter-spacing:0.5px;">Semifinales</h3>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;
+                           padding:6px 0;border-bottom:1px solid #1e293b;gap:12px;">
+              <span style="color:#cbd5e1;font-size:0.88rem;">Pronosticar las selecciones clasificadas.</span>
+              <span style="color:#fbbf24;font-weight:700;font-size:0.9rem;white-space:nowrap;">7 pts por selección acertada</span>
+            </div>
+<div style="display:flex;justify-content:space-between;align-items:baseline;
+                           padding:6px 0;border-bottom:1px solid #1e293b;gap:12px;">
+              <span style="color:#cbd5e1;font-size:0.88rem;">Bonus si la aciertas en la posición correcta.</span>
+              <span style="color:#fbbf24;font-weight:700;font-size:0.9rem;white-space:nowrap;">+4 pts</span>
+            </div>
+        </div>
+
+        <div style="background:#1e293b;border:1px solid #334155;border-radius:12px;
+                    padding:18px 20px;break-inside:avoid;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+            <span style="font-size:1.5rem;">🏆</span>
+            <h3 style="color:#fbbf24;font-size:0.95rem;font-weight:700;
+                       text-transform:uppercase;letter-spacing:0.5px;">Final</h3>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;
+                           padding:6px 0;border-bottom:1px solid #1e293b;gap:12px;">
+              <span style="color:#cbd5e1;font-size:0.88rem;">Pronosticar las selecciones clasificadas.</span>
+              <span style="color:#fbbf24;font-weight:700;font-size:0.9rem;white-space:nowrap;">10 pts por selección acertada</span>
+            </div>
+<div style="display:flex;justify-content:space-between;align-items:baseline;
+                           padding:6px 0;border-bottom:1px solid #1e293b;gap:12px;">
+              <span style="color:#cbd5e1;font-size:0.88rem;">Bonus si la aciertas en la posición correcta.</span>
+              <span style="color:#fbbf24;font-weight:700;font-size:0.9rem;white-space:nowrap;">+5 pts</span>
+            </div>
+        </div>
+
+        <div style="background:#1e293b;border:1px solid #334155;border-radius:12px;
+                    padding:18px 20px;break-inside:avoid;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+            <span style="font-size:1.5rem;">❓</span>
+            <h3 style="color:#fbbf24;font-size:0.95rem;font-weight:700;
+                       text-transform:uppercase;letter-spacing:0.5px;">Cuestiones</h3>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;
+                           padding:6px 0;border-bottom:1px solid #1e293b;gap:12px;">
+              <span style="color:#cbd5e1;font-size:0.88rem;">Marcar Sí o No a cada pregunta.</span>
+              <span style="color:#fbbf24;font-weight:700;font-size:0.9rem;white-space:nowrap;">3 pts por respuesta correcta</span>
+            </div>
+        </div>
+
+        <div style="background:#1e293b;border:1px solid #334155;border-radius:12px;
+                    padding:18px 20px;break-inside:avoid;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+            <span style="font-size:1.5rem;">🥇</span>
+            <h3 style="color:#fbbf24;font-size:0.95rem;font-weight:700;
+                       text-transform:uppercase;letter-spacing:0.5px;">Campeón del Mundial</h3>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;
+                           padding:6px 0;border-bottom:1px solid #1e293b;gap:12px;">
+              <span style="color:#cbd5e1;font-size:0.88rem;">Escribir la selección ganadora. Tienes 2 opciones.</span>
+              
+            </div>
+<div style="display:flex;justify-content:space-between;align-items:baseline;
+                           padding:6px 0;border-bottom:1px solid #1e293b;gap:12px;">
+              <span style="color:#cbd5e1;font-size:0.88rem;">Si aciertas en la 1ª opción.</span>
+              <span style="color:#fbbf24;font-weight:700;font-size:0.9rem;white-space:nowrap;">20 pts</span>
+            </div>
+<div style="display:flex;justify-content:space-between;align-items:baseline;
+                           padding:6px 0;border-bottom:1px solid #1e293b;gap:12px;">
+              <span style="color:#cbd5e1;font-size:0.88rem;">Si aciertas en la 2ª opción.</span>
+              <span style="color:#fbbf24;font-weight:700;font-size:0.9rem;white-space:nowrap;">10 pts</span>
+            </div>
+        </div>
+
+        <div style="background:#1e293b;border:1px solid #334155;border-radius:12px;
+                    padding:18px 20px;break-inside:avoid;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+            <span style="font-size:1.5rem;">👟</span>
+            <h3 style="color:#fbbf24;font-size:0.95rem;font-weight:700;
+                       text-transform:uppercase;letter-spacing:0.5px;">Pichichi</h3>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;
+                           padding:6px 0;border-bottom:1px solid #1e293b;gap:12px;">
+              <span style="color:#cbd5e1;font-size:0.88rem;">Jugador que la FIFA nombrará pichichi. Tienes 2 opciones.</span>
+              
+            </div>
+<div style="display:flex;justify-content:space-between;align-items:baseline;
+                           padding:6px 0;border-bottom:1px solid #1e293b;gap:12px;">
+              <span style="color:#cbd5e1;font-size:0.88rem;">Si aciertas en la 1ª opción.</span>
+              <span style="color:#fbbf24;font-weight:700;font-size:0.9rem;white-space:nowrap;">16 pts</span>
+            </div>
+<div style="display:flex;justify-content:space-between;align-items:baseline;
+                           padding:6px 0;border-bottom:1px solid #1e293b;gap:12px;">
+              <span style="color:#cbd5e1;font-size:0.88rem;">Si aciertas en la 2ª opción.</span>
+              <span style="color:#fbbf24;font-weight:700;font-size:0.9rem;white-space:nowrap;">8 pts</span>
+            </div>
+        </div>
+
+        <div style="background:#1e293b;border:1px solid #334155;border-radius:12px;
+                    padding:18px 20px;break-inside:avoid;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+            <span style="font-size:1.5rem;">⭐</span>
+            <h3 style="color:#fbbf24;font-size:0.95rem;font-weight:700;
+                       text-transform:uppercase;letter-spacing:0.5px;">Mejor Jugador</h3>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;
+                           padding:6px 0;border-bottom:1px solid #1e293b;gap:12px;">
+              <span style="color:#cbd5e1;font-size:0.88rem;">Jugador que la FIFA nombrará mejor jugador. Tienes 2 opciones.</span>
+              
+            </div>
+<div style="display:flex;justify-content:space-between;align-items:baseline;
+                           padding:6px 0;border-bottom:1px solid #1e293b;gap:12px;">
+              <span style="color:#cbd5e1;font-size:0.88rem;">Si aciertas en la 1ª opción.</span>
+              <span style="color:#fbbf24;font-weight:700;font-size:0.9rem;white-space:nowrap;">16 pts</span>
+            </div>
+<div style="display:flex;justify-content:space-between;align-items:baseline;
+                           padding:6px 0;border-bottom:1px solid #1e293b;gap:12px;">
+              <span style="color:#cbd5e1;font-size:0.88rem;">Si aciertas en la 2ª opción.</span>
+              <span style="color:#fbbf24;font-weight:700;font-size:0.9rem;white-space:nowrap;">8 pts</span>
+            </div>
+        </div>
+
+        <div style="background:#1e293b;border:1px solid #334155;border-radius:12px;
+                    padding:18px 20px;break-inside:avoid;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+            <span style="font-size:1.5rem;">🧤</span>
+            <h3 style="color:#fbbf24;font-size:0.95rem;font-weight:700;
+                       text-transform:uppercase;letter-spacing:0.5px;">Guante de Oro</h3>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;
+                           padding:6px 0;border-bottom:1px solid #1e293b;gap:12px;">
+              <span style="color:#cbd5e1;font-size:0.88rem;">Portero que la FIFA nombrará mejor portero. Tienes 2 opciones.</span>
+              
+            </div>
+<div style="display:flex;justify-content:space-between;align-items:baseline;
+                           padding:6px 0;border-bottom:1px solid #1e293b;gap:12px;">
+              <span style="color:#cbd5e1;font-size:0.88rem;">Si aciertas en la 1ª opción.</span>
+              <span style="color:#fbbf24;font-weight:700;font-size:0.9rem;white-space:nowrap;">14 pts</span>
+            </div>
+<div style="display:flex;justify-content:space-between;align-items:baseline;
+                           padding:6px 0;border-bottom:1px solid #1e293b;gap:12px;">
+              <span style="color:#cbd5e1;font-size:0.88rem;">Si aciertas en la 2ª opción.</span>
+              <span style="color:#fbbf24;font-weight:700;font-size:0.9rem;white-space:nowrap;">7 pts</span>
+            </div>
+        </div>
+
+        <div style="background:#1e293b;border:1px solid #334155;border-radius:12px;
+                    padding:18px 20px;break-inside:avoid;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+            <span style="font-size:1.5rem;">🇪🇸</span>
+            <h3 style="color:#fbbf24;font-size:0.95rem;font-weight:700;
+                       text-transform:uppercase;letter-spacing:0.5px;">Pichichi Español</h3>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;
+                           padding:6px 0;border-bottom:1px solid #1e293b;gap:12px;">
+              <span style="color:#cbd5e1;font-size:0.88rem;">Máximo goleador/es de España (mínimo 2 goles). Tienes 2 opciones.</span>
+              
+            </div>
+<div style="display:flex;justify-content:space-between;align-items:baseline;
+                           padding:6px 0;border-bottom:1px solid #1e293b;gap:12px;">
+              <span style="color:#cbd5e1;font-size:0.88rem;">Si aciertas en la 1ª opción.</span>
+              <span style="color:#fbbf24;font-weight:700;font-size:0.9rem;white-space:nowrap;">12 pts</span>
+            </div>
+<div style="display:flex;justify-content:space-between;align-items:baseline;
+                           padding:6px 0;border-bottom:1px solid #1e293b;gap:12px;">
+              <span style="color:#cbd5e1;font-size:0.88rem;">Si aciertas en la 2ª opción.</span>
+              <span style="color:#fbbf24;font-weight:700;font-size:0.9rem;white-space:nowrap;">6 pts</span>
+            </div>
+        </div>
+
+        <div style="background:#1e293b;border:1px solid #334155;border-radius:12px;
+                    padding:18px 20px;break-inside:avoid;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+            <span style="font-size:1.5rem;">📋</span>
+            <h3 style="color:#fbbf24;font-size:0.95rem;font-weight:700;
+                       text-transform:uppercase;letter-spacing:0.5px;">Resultado de la Final</h3>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;
+                           padding:6px 0;border-bottom:1px solid #1e293b;gap:12px;">
+              <span style="color:#cbd5e1;font-size:0.88rem;">Resultado exacto. El orden importa (el cuadro oficial marca quién va primero). Tienes 2 opciones.</span>
+              
+            </div>
+<div style="display:flex;justify-content:space-between;align-items:baseline;
+                           padding:6px 0;border-bottom:1px solid #1e293b;gap:12px;">
+              <span style="color:#cbd5e1;font-size:0.88rem;">Si aciertas en la 1ª opción.</span>
+              <span style="color:#fbbf24;font-weight:700;font-size:0.9rem;white-space:nowrap;">8 pts</span>
+            </div>
+<div style="display:flex;justify-content:space-between;align-items:baseline;
+                           padding:6px 0;border-bottom:1px solid #1e293b;gap:12px;">
+              <span style="color:#cbd5e1;font-size:0.88rem;">Si aciertas en la 2ª opción.</span>
+              <span style="color:#fbbf24;font-weight:700;font-size:0.9rem;white-space:nowrap;">4 pts</span>
+            </div>
+        </div>
+
+        <div style="background:#1e293b;border:1px solid #334155;border-radius:12px;
+                    padding:18px 20px;break-inside:avoid;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+            <span style="font-size:1.5rem;">🛡️</span>
+            <h3 style="color:#fbbf24;font-size:0.95rem;font-weight:700;
+                       text-transform:uppercase;letter-spacing:0.5px;">Resultados de España en 1ª Fase</h3>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;
+                           padding:6px 0;border-bottom:1px solid #1e293b;gap:12px;">
+              <span style="color:#cbd5e1;font-size:0.88rem;">Resultado exacto de cada partido de España (el orden importa).</span>
+              <span style="color:#fbbf24;font-weight:700;font-size:0.9rem;white-space:nowrap;">6 pts por partido</span>
+            </div>
+        </div>
+
+        <div style="background:#1e293b;border:1px solid #334155;border-radius:12px;
+                    padding:18px 20px;break-inside:avoid;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+            <span style="font-size:1.5rem;">🔢</span>
+            <h3 style="color:#fbbf24;font-size:0.95rem;font-weight:700;
+                       text-transform:uppercase;letter-spacing:0.5px;">Mayor nº de goles en un partido</h3>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;
+                           padding:6px 0;border-bottom:1px solid #1e293b;gap:12px;">
+              <span style="color:#cbd5e1;font-size:0.88rem;">Suma de goles de ambos equipos en un único partido, sin penaltis.</span>
+              <span style="color:#fbbf24;font-weight:700;font-size:0.9rem;white-space:nowrap;">5 pts por acierto</span>
+            </div>
+        </div>
+
+        <div style="background:#1e293b;border:1px solid #334155;border-radius:12px;
+                    padding:18px 20px;break-inside:avoid;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+            <span style="font-size:1.5rem;">🎯</span>
+            <h3 style="color:#fbbf24;font-size:0.95rem;font-weight:700;
+                       text-transform:uppercase;letter-spacing:0.5px;">Nº de goles de España</h3>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;
+                           padding:6px 0;border-bottom:1px solid #1e293b;gap:12px;">
+              <span style="color:#cbd5e1;font-size:0.88rem;">Total de goles marcados por España en todo el Mundial, sin penaltis.</span>
+              <span style="color:#fbbf24;font-weight:700;font-size:0.9rem;white-space:nowrap;">5 pts por acierto</span>
+            </div>
+        </div>
+
+        <div style="background:#1e293b;border:1px solid #334155;border-radius:12px;
+                    padding:18px 20px;break-inside:avoid;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+            <span style="font-size:1.5rem;">🚫</span>
+            <h3 style="color:#fbbf24;font-size:0.95rem;font-weight:700;
+                       text-transform:uppercase;letter-spacing:0.5px;">Nº de goles encajados por España</h3>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;
+                           padding:6px 0;border-bottom:1px solid #1e293b;gap:12px;">
+              <span style="color:#cbd5e1;font-size:0.88rem;">Total de goles encajados por España en todo el Mundial, sin penaltis.</span>
+              <span style="color:#fbbf24;font-weight:700;font-size:0.9rem;white-space:nowrap;">5 pts por acierto</span>
+            </div>
+        </div>
+
+        <div style="background:#1e293b;border:1px solid #334155;border-radius:12px;
+                    padding:18px 20px;break-inside:avoid;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+            <span style="font-size:1.5rem;">💥</span>
+            <h3 style="color:#fbbf24;font-size:0.95rem;font-weight:700;
+                       text-transform:uppercase;letter-spacing:0.5px;">Mayor goleada</h3>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;
+                           padding:6px 0;border-bottom:1px solid #1e293b;gap:12px;">
+              <span style="color:#cbd5e1;font-size:0.88rem;">Máximo de goles que un equipo marcará en un solo partido, sin penaltis.</span>
+              <span style="color:#fbbf24;font-weight:700;font-size:0.9rem;white-space:nowrap;">5 pts por acierto</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reparto de premios -->
+    <div style="background:#1e293b;border:1px solid #334155;border-radius:12px;
+                padding:20px 24px;max-width:500px;margin:0 auto 16px;">
+      <h3 style="color:#fbbf24;font-size:1rem;font-weight:700;text-transform:uppercase;
+                 letter-spacing:1px;margin-bottom:14px;">💰 Reparto de Premios</h3>
+      <div style="display:flex;justify-content:space-between;padding:10px 0;
+                        border-bottom:1px solid #334155;">
+          <span style="font-size:1rem;">🥇 1er clasificado</span>
+          <span style="color:#fbbf24;font-weight:700;">60% de lo recaudado</span>
+        </div>
+<div style="display:flex;justify-content:space-between;padding:10px 0;
+                        border-bottom:1px solid #334155;">
+          <span style="font-size:1rem;">🥈 2º clasificado</span>
+          <span style="color:#fbbf24;font-weight:700;">25% de lo recaudado</span>
+        </div>
+<div style="display:flex;justify-content:space-between;padding:10px 0;
+                        border-bottom:1px solid #334155;">
+          <span style="font-size:1rem;">🥉 3er clasificado</span>
+          <span style="color:#fbbf24;font-weight:700;">15% de lo recaudado</span>
+        </div>
+      <p style="color:#64748b;font-size:0.78rem;margin-top:12px;line-height:1.5;">
+        En caso de empate a puntos, el importe se reparte entre los empatados sumando los premios de los puestos que ocupan.
+      </p>
+    </div>
+    
+  </main>
+  <footer>
+    <p>Última actualización: 14/06/2026 14:55</p>
+  </footer>
+</body>
+</html>

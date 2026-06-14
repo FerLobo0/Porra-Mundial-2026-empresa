@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resultados — Porra Mundial 2026</title>
+  <style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background-color: #0d1b2a;
+    color: #e2e8f0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 50%, #7c2d12 100%);
+    padding: 24px 20px 18px;
+    text-align: center;
+    border-bottom: 3px solid #f59e0b;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+  header h1 {
+    font-size: clamp(1.4rem, 4vw, 2.2rem);
+    color: #fbbf24;
+    letter-spacing: 2px;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+    font-weight: 900;
+  }
+  header p.subtitulo {
+    color: #fca5a5;
+    font-size: 0.85rem;
+    margin-top: 4px;
+    letter-spacing: 1px;
+  }
+
+  /* ── NAV ── */
+  nav {
+    background-color: #1e293b;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    border-bottom: 2px solid #334155;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+  }
+  nav a {
+    color: #cbd5e1;
+    text-decoration: none;
+    padding: 14px 22px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+    transition: background 0.2s, color 0.2s;
+    border-bottom: 3px solid transparent;
+  }
+  nav a:hover, nav a.activo {
+    color: #fbbf24;
+    background-color: #0f172a;
+    border-bottom-color: #f59e0b;
+  }
+
+  /* ── MAIN ── */
+  main {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 32px 16px;
+    flex: 1;
+    width: 100%;
+  }
+
+  h2 {
+    font-size: 1.4rem;
+    color: #fbbf24;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #334155;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  /* ── TABLAS ── */
+  .tabla-wrapper {
+    overflow-x: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #1e293b;
+    font-size: 0.92rem;
+  }
+  thead tr {
+    background: linear-gradient(90deg, #991b1b, #b91c1c);
+  }
+  th {
+    color: #fff;
+    padding: 13px 12px;
+    text-align: center;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  th.col-nombre { text-align: left; }
+  td {
+    padding: 11px 12px;
+    border-bottom: 1px solid #2d3f55;
+    text-align: center;
+    vertical-align: middle;
+  }
+  td.col-nombre { text-align: left; font-weight: 600; }
+  tr:hover td { background-color: #263347; }
+  tr:last-child td { border-bottom: none; }
+
+  /* Fila del TOP 3 */
+  tr.pos-1 td { background-color: rgba(251,191,36,0.12); }
+  tr.pos-2 td { background-color: rgba(148,163,184,0.10); }
+  tr.pos-3 td { background-color: rgba(180,120,80,0.10); }
+  tr.pos-1:hover td { background-color: rgba(251,191,36,0.18); }
+  tr.pos-2:hover td { background-color: rgba(148,163,184,0.15); }
+  tr.pos-3:hover td { background-color: rgba(180,120,80,0.15); }
+
+  /* Celda TOTAL destacada */
+  td.total { font-weight: 800; font-size: 1.05rem; color: #fbbf24; }
+  td.total-cero { color: #64748b; }
+
+  /* ── TARJETAS PARTICIPANTE ── */
+  .grid-participantes {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+    margin-top: 10px;
+  }
+  .card-participante {
+    background: linear-gradient(135deg, #1e293b, #263347);
+    border: 1px solid #334155;
+    border-radius: 12px;
+    padding: 20px 16px;
+    text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .card-participante:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
+  .card-participante a {
+    color: #fbbf24;
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+  .card-participante.sin-porra { opacity: 0.55; }
+  .card-participante.sin-porra span { color: #94a3b8; font-size: 1.05rem; font-weight: 600; }
+  .card-participante .puntos-card {
+    font-size: 2rem;
+    font-weight: 900;
+    color: #fbbf24;
+    line-height: 1;
+    margin: 6px 0 2px;
+  }
+  .card-participante .label-pts { font-size: 0.7rem; color: #64748b; letter-spacing: 1px; text-transform: uppercase; }
+  .card-participante .badge-pos {
+    display: inline-block;
+    font-size: 1.3rem;
+    margin-bottom: 4px;
+  }
+  .tag-pendiente {
+    display: inline-block;
+    background-color: #334155;
+    color: #94a3b8;
+    font-size: 0.7rem;
+    border-radius: 4px;
+    padding: 2px 6px;
+    margin-top: 6px;
+    letter-spacing: 0.5px;
+  }
+
+  /* ── SECCIÓN PORRA INDIVIDUAL ── */
+  .seccion-porra {
+    margin-bottom: 36px;
+  }
+  .seccion-porra h3 {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #f59e0b;
+    padding: 8px 14px;
+    background-color: #1a2a3a;
+    border-left: 4px solid #f59e0b;
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 12px;
+  }
+  .tabla-partidos th { font-size: 0.72rem; }
+  .tabla-partidos td { font-size: 0.85rem; padding: 8px 10px; }
+  .resultado-1  { color: #86efac; font-weight: 700; }
+  .resultado-x  { color: #fbbf24; font-weight: 700; }
+  .resultado-2  { color: #f87171; font-weight: 700; }
+  .grupo-badge {
+    display: inline-block;
+    font-size: 0.7rem;
+    background: #334155;
+    border-radius: 4px;
+    padding: 1px 5px;
+    color: #94a3b8;
+  }
+
+  .tabla-fase th, .tabla-fase td { padding: 9px 12px; }
+  .tabla-cuestiones .respuesta-si  { color: #86efac; font-weight: 700; }
+  .tabla-cuestiones .respuesta-no  { color: #f87171; font-weight: 700; }
+
+  .tabla-varios td:first-child { text-align: left; color: #94a3b8; font-size: 0.82rem; }
+  .tabla-varios td.valor { color: #e2e8f0; font-weight: 600; text-align: left; }
+
+  /* ── PARTIDOS (resultados.html) ── */
+  .filtro-grupo {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+    justify-content: center;
+  }
+  .btn-filtro {
+    background: #1e293b;
+    border: 1px solid #334155;
+    color: #94a3b8;
+    padding: 6px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-family: inherit;
+    transition: all 0.2s;
+  }
+  .btn-filtro:hover, .btn-filtro.activo {
+    background: #991b1b;
+    border-color: #f59e0b;
+    color: #fbbf24;
+  }
+  .partido-pendiente { color: #475569; font-style: italic; }
+  .partido-jugado { color: #86efac; font-weight: 600; }
+  .resultado-partido { font-size: 1rem; font-weight: 800; color: #fbbf24; letter-spacing: 1px; }
+  .fase-header {
+    background: linear-gradient(90deg, #1a2a3a, #1e293b);
+    color: #f59e0b;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 8px 14px;
+    border-left: 3px solid #f59e0b;
+    margin: 24px 0 10px;
+    border-radius: 0 6px 6px 0;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background-color: #0f172a;
+    border-top: 1px solid #1e293b;
+    text-align: center;
+    padding: 16px;
+    color: #475569;
+    font-size: 0.8rem;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 640px) {
+    nav a { padding: 12px 14px; font-size: 0.82rem; }
+    table { font-size: 0.82rem; }
+    th, td { padding: 8px 6px; }
+    main { padding: 20px 10px; }
+  }
+</style>
+</head>
+<body>
+  <header>
+    <h1>🏆 PORRA MUNDIAL 2026 🏆</h1>
+    <p class="subtitulo">USA · CANADA · MEXICO</p>
+  </header>
+  <nav>
+    <a href="index.html" class="">🏆 Clasificación</a>
+<a href="resultados.html" class="activo">⚽ Resultados</a>
+<a href="participantes.html" class="">👥 Participantes</a>
+<a href="normas.html" class="">📋 Normas</a>
+  </nav>
+  <main>
+    
+    <h2>Resultados del Mundial</h2>
+
+    <!-- PESTAÑAS -->
+    <div style="display:flex;flex-wrap:wrap;gap:0;margin-bottom:20px;
+                border-bottom:2px solid #334155;overflow-x:auto;">
+      <button class="tab-btn tab-activo" onclick="cambiarTab('partidos', this)"
+              style="padding:10px 16px;background:none;border:none;color:#fbbf24;
+                     font-weight:700;font-size:0.85rem;cursor:pointer;font-family:inherit;
+                     border-bottom:3px solid #f59e0b;margin-bottom:-2px;white-space:nowrap;">
+        ⚽ 1ª Fase
+      </button>
+      <button class="tab-btn" onclick="cambiarTab('doce', this)"
+              style="padding:10px 16px;background:none;border:none;color:#94a3b8;
+                     font-weight:700;font-size:0.85rem;cursor:pointer;font-family:inherit;
+                     border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap;">
+        🔟 1/16
+      </button>
+      <button class="tab-btn" onclick="cambiarTab('octavos', this)"
+              style="padding:10px 16px;background:none;border:none;color:#94a3b8;
+                     font-weight:700;font-size:0.85rem;cursor:pointer;font-family:inherit;
+                     border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap;">
+        8️⃣ Octavos
+      </button>
+      <button class="tab-btn" onclick="cambiarTab('cuartos', this)"
+              style="padding:10px 16px;background:none;border:none;color:#94a3b8;
+                     font-weight:700;font-size:0.85rem;cursor:pointer;font-family:inherit;
+                     border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap;">
+        4️⃣ Cuartos
+      </button>
+      <button class="tab-btn" onclick="cambiarTab('semis', this)"
+              style="padding:10px 16px;background:none;border:none;color:#94a3b8;
+                     font-weight:700;font-size:0.85rem;cursor:pointer;font-family:inherit;
+                     border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap;">
+        2️⃣ Semis
+      </button>
+      <button class="tab-btn" onclick="cambiarTab('final', this)"
+              style="padding:10px 16px;background:none;border:none;color:#94a3b8;
+                     font-weight:700;font-size:0.85rem;cursor:pointer;font-family:inherit;
+                     border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap;">
+        🏆 Final
+      </button>
+      <button class="tab-btn" onclick="cambiarTab('cuestiones', this)"
+              style="padding:10px 16px;background:none;border:none;color:#94a3b8;
+                     font-weight:700;font-size:0.85rem;cursor:pointer;font-family:inherit;
+                     border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap;">
+        ❓ Cuestiones
+      </button>
+      <button class="tab-btn" onclick="cambiarTab('varios', this)"
+              style="padding:10px 16px;background:none;border:none;color:#94a3b8;
+                     font-weight:700;font-size:0.85rem;cursor:pointer;font-family:inherit;
+                     border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap;">
+        🎯 Varios
+      </button>
+    </div>
+
+    <!-- TAB: 1ª FASE -->
+    <div id="tab-partidos">
+      <div class="filtro-grupo"><button class="btn-filtro activo" onclick="filtrar('todos', this)">Todos</button>
+<button class="btn-filtro" onclick="filtrar('Grupo_A', this)">Grupo A</button>
+<button class="btn-filtro" onclick="filtrar('Grupo_B', this)">Grupo B</button>
+<button class="btn-filtro" onclick="filtrar('Grupo_C', this)">Grupo C</button>
+<button class="btn-filtro" onclick="filtrar('Grupo_D', this)">Grupo D</button>
+<button class="btn-filtro" onclick="filtrar('Grupo_E', this)">Grupo E</button>
+<button class="btn-filtro" onclick="filtrar('Grupo_F', this)">Grupo F</button>
+<button class="btn-filtro" onclick="filtrar('Grupo_G', this)">Grupo G</button>
+<button class="btn-filtro" onclick="filtrar('Grupo_H', this)">Grupo H</button>
+<button class="btn-filtro" onclick="filtrar('Grupo_I', this)">Grupo I</button>
+<button class="btn-filtro" onclick="filtrar('Grupo_J', this)">Grupo J</button>
+<button class="btn-filtro" onclick="filtrar('Grupo_K', this)">Grupo K</button>
+<button class="btn-filtro" onclick="filtrar('Grupo_L', this)">Grupo L</button></div>
+      <div class="tabla-wrapper">
+        <table class="tabla-partidos">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th class="col-nombre">Local</th>
+              <th>Resultado</th>
+              <th class="col-nombre">Visitante</th>
+              <th>Estadio</th>
+            </tr>
+          </thead>
+          <tbody id="cuerpo-partidos"><tr class="grupo-sep" data-grupo="Grupo_A"><td colspan="5" class="fase-header">Grupo A</td></tr>
+
+        <tr data-grupo="Grupo_A">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">J11/06 - 21:00</td>
+          <td class="col-nombre">México</td>
+          <td><span class="resultado-partido">1</span></td>
+          <td class="col-nombre">Sudáfrica</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio Azteca, C. de México, México</td>
+        </tr>
+
+        <tr data-grupo="Grupo_A">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">V12/06 - 04:00</td>
+          <td class="col-nombre">República de Corea</td>
+          <td><span class="resultado-partido">1</span></td>
+          <td class="col-nombre">República Checa</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio Akron, Guadalajara, México</td>
+        </tr>
+<tr class="grupo-sep" data-grupo="Grupo_B"><td colspan="5" class="fase-header">Grupo B</td></tr>
+
+        <tr data-grupo="Grupo_B">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">V12/06 - 21:00</td>
+          <td class="col-nombre">Canadá</td>
+          <td><span class="resultado-partido">X</span></td>
+          <td class="col-nombre">Bosnia y Herzegovina</td>
+          <td style="color:#64748b;font-size:0.75rem;">BMO Field, Toronto, Canadá</td>
+        </tr>
+<tr class="grupo-sep" data-grupo="Grupo_D"><td colspan="5" class="fase-header">Grupo D</td></tr>
+
+        <tr data-grupo="Grupo_D">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">S13/06 - 03:00</td>
+          <td class="col-nombre">Estados Unidos</td>
+          <td><span class="resultado-partido">1</span></td>
+          <td class="col-nombre">Paraguay</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio SoFi, Los Ángeles, EEUU</td>
+        </tr>
+<tr class="grupo-sep" data-grupo="Grupo_B"><td colspan="5" class="fase-header">Grupo B</td></tr>
+
+        <tr data-grupo="Grupo_B">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">S13/06 - 21:00</td>
+          <td class="col-nombre">Qatar</td>
+          <td><span class="resultado-partido">X</span></td>
+          <td class="col-nombre">Suiza</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio Levi's, California, EEUU</td>
+        </tr>
+<tr class="grupo-sep" data-grupo="Grupo_C"><td colspan="5" class="fase-header">Grupo C</td></tr>
+
+        <tr data-grupo="Grupo_C">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">D14/06 - 00:00</td>
+          <td class="col-nombre">Brasil</td>
+          <td><span class="resultado-partido">X</span></td>
+          <td class="col-nombre">Marruecos</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio Metlife, Nueva Jersey, EEUU</td>
+        </tr>
+
+        <tr data-grupo="Grupo_C">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">D14/06 - 03:00</td>
+          <td class="col-nombre">Haití</td>
+          <td><span class="resultado-partido">2</span></td>
+          <td class="col-nombre">Escocia</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio Gillette, Boston, EEUU</td>
+        </tr>
+<tr class="grupo-sep" data-grupo="Grupo_D"><td colspan="5" class="fase-header">Grupo D</td></tr>
+
+        <tr data-grupo="Grupo_D">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">D14/06 - 06:00</td>
+          <td class="col-nombre">Australia</td>
+          <td><span class="resultado-partido">1</span></td>
+          <td class="col-nombre">Turquía</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio BC Place, Vancouver, Canadá</td>
+        </tr>
+<tr class="grupo-sep" data-grupo="Grupo_E"><td colspan="5" class="fase-header">Grupo E</td></tr>
+
+        <tr data-grupo="Grupo_E">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">D14/06 - 19:00</td>
+          <td class="col-nombre">Alemania</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Curaçao</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio de Houston, Texas, EEUU</td>
+        </tr>
+<tr class="grupo-sep" data-grupo="Grupo_F"><td colspan="5" class="fase-header">Grupo F</td></tr>
+
+        <tr data-grupo="Grupo_F">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">D14/06 - 22:00</td>
+          <td class="col-nombre">Países Bajos</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Japón</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio AT&T, Dallas, EEUU</td>
+        </tr>
+<tr class="grupo-sep" data-grupo="Grupo_E"><td colspan="5" class="fase-header">Grupo E</td></tr>
+
+        <tr data-grupo="Grupo_E">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">L15/06 - 01:00</td>
+          <td class="col-nombre">Costa de Marfil</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Ecuador</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio Lincoln Financial Field, Filadelfia, EEUU</td>
+        </tr>
+<tr class="grupo-sep" data-grupo="Grupo_F"><td colspan="5" class="fase-header">Grupo F</td></tr>
+
+        <tr data-grupo="Grupo_F">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">L15/06 - 04:00</td>
+          <td class="col-nombre">Suecia</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Túnez</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio BBVA, Monterrey, México</td>
+        </tr>
+<tr class="grupo-sep" data-grupo="Grupo_H"><td colspan="5" class="fase-header">Grupo H</td></tr>
+
+        <tr data-grupo="Grupo_H">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">L15/06 - 18:00</td>
+          <td class="col-nombre">España</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Cabo Verde</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio Mercedes Benz, Atlanta, EEUU</td>
+        </tr>
+<tr class="grupo-sep" data-grupo="Grupo_G"><td colspan="5" class="fase-header">Grupo G</td></tr>
+
+        <tr data-grupo="Grupo_G">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">L15/06 - 21:00</td>
+          <td class="col-nombre">Bélgica</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Egipto</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio Lumen Field, Seattle, EEUU</td>
+        </tr>
+<tr class="grupo-sep" data-grupo="Grupo_H"><td colspan="5" class="fase-header">Grupo H</td></tr>
+
+        <tr data-grupo="Grupo_H">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">M16/06 - 00:00</td>
+          <td class="col-nombre">Arabia Saudí</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Uruguay</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio Hard Rock, Miami, EEUU</td>
+        </tr>
+<tr class="grupo-sep" data-grupo="Grupo_G"><td colspan="5" class="fase-header">Grupo G</td></tr>
+
+        <tr data-grupo="Grupo_G">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">M16/06 - 03:00</td>
+          <td class="col-nombre">RI de Irán</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Nueva Zelanda</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio SoFi, Los Ángeles, EEUU</td>
+        </tr>
+<tr class="grupo-sep" data-grupo="Grupo_I"><td colspan="5" class="fase-header">Grupo I</td></tr>
+
+        <tr data-grupo="Grupo_I">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">M16/06 - 21:00</td>
+          <td class="col-nombre">Francia</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Senegal</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio Metlife, Nueva Jersey, EEUU</td>
+        </tr>
+
+        <tr data-grupo="Grupo_I">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">X17/06 - 00:00</td>
+          <td class="col-nombre">Iraq</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Noruega</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio Gillette, Boston, EEUU</td>
+        </tr>
+<tr class="grupo-sep" data-grupo="Grupo_J"><td colspan="5" class="fase-header">Grupo J</td></tr>
+
+        <tr data-grupo="Grupo_J">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">X17/06 - 03:00</td>
+          <td class="col-nombre">Argentina</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Argelia</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio Kansas City, Kansas, EEUU</td>
+        </tr>
+
+        <tr data-grupo="Grupo_J">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">X17/06 - 06:00</td>
+          <td class="col-nombre">Austria</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Jordania</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio Levi's, California, EEUU</td>
+        </tr>
+<tr class="grupo-sep" data-grupo="Grupo_K"><td colspan="5" class="fase-header">Grupo K</td></tr>
+
+        <tr data-grupo="Grupo_K">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">X17/06 - 19:00</td>
+          <td class="col-nombre">Portugal</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">RD Congo</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio de Houston, Texas, EEUU</td>
+        </tr>
+<tr class="grupo-sep" data-grupo="Grupo_L"><td colspan="5" class="fase-header">Grupo L</td></tr>
+
+        <tr data-grupo="Grupo_L">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">X17/06 - 22:00</td>
+          <td class="col-nombre">Inglaterra</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Croacia</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio AT&T, Dallas, EEUU</td>
+        </tr>
+
+        <tr data-grupo="Grupo_L">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">J18/06 - 01:00</td>
+          <td class="col-nombre">Ghana</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Panamá</td>
+          <td style="color:#64748b;font-size:0.75rem;">BMO Field, Toronto, Canadá</td>
+        </tr>
+<tr class="grupo-sep" data-grupo="Grupo_K"><td colspan="5" class="fase-header">Grupo K</td></tr>
+
+        <tr data-grupo="Grupo_K">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">J18/06 - 04:00</td>
+          <td class="col-nombre">Uzbequistán</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Colombia</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio Azteca, C. de México, México</td>
+        </tr>
+<tr class="grupo-sep" data-grupo="Grupo_A"><td colspan="5" class="fase-header">Grupo A</td></tr>
+
+        <tr data-grupo="Grupo_A">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">J18/06 - 18:00</td>
+          <td class="col-nombre">República Checa</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Sudáfrica</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio Mercedes Benz, Atlanta, EEUU</td>
+        </tr>
+<tr class="grupo-sep" data-grupo="Grupo_B"><td colspan="5" class="fase-header">Grupo B</td></tr>
+
+        <tr data-grupo="Grupo_B">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">J18/06 - 21:00</td>
+          <td class="col-nombre">Suiza</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Bosnia y Herzegovina</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio SoFi, Los Ángeles, EEUU</td>
+        </tr>
+
+        <tr data-grupo="Grupo_B">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">V19/06 - 00:00</td>
+          <td class="col-nombre">Canadá</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Qatar</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio BC Place, Vancouver, Canadá</td>
+        </tr>
+<tr class="grupo-sep" data-grupo="Grupo_A"><td colspan="5" class="fase-header">Grupo A</td></tr>
+
+        <tr data-grupo="Grupo_A">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">V19/06 - 03:00</td>
+          <td class="col-nombre">México</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">República de Corea</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio Akron, Guadalajara, México</td>
+        </tr>
+<tr class="grupo-sep" data-grupo="Grupo_D"><td colspan="5" class="fase-header">Grupo D</td></tr>
+
+        <tr data-grupo="Grupo_D">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">V19/06 - 21:00</td>
+          <td class="col-nombre">Estados Unidos</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Australia</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio Lumen Field, Seattle, EEUU</td>
+        </tr>
+<tr class="grupo-sep" data-grupo="Grupo_C"><td colspan="5" class="fase-header">Grupo C</td></tr>
+
+        <tr data-grupo="Grupo_C">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">S20/06 - 00:00</td>
+          <td class="col-nombre">Escocia</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Marruecos</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio Gillette, Boston, EEUU</td>
+        </tr>
+
+        <tr data-grupo="Grupo_C">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">S20/06 - 02:30</td>
+          <td class="col-nombre">Brasil</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Haití</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio Lincoln Financial Field, Filadelfia, EEUU</td>
+        </tr>
+<tr class="grupo-sep" data-grupo="Grupo_D"><td colspan="5" class="fase-header">Grupo D</td></tr>
+
+        <tr data-grupo="Grupo_D">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">S20/06 - 05:00</td>
+          <td class="col-nombre">Turquía</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Paraguay</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio Levi's, California, EEUU</td>
+        </tr>
+<tr class="grupo-sep" data-grupo="Grupo_F"><td colspan="5" class="fase-header">Grupo F</td></tr>
+
+        <tr data-grupo="Grupo_F">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">S20/06 - 19:00</td>
+          <td class="col-nombre">Países Bajos</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Suecia</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio de Houston, Texas, EEUU</td>
+        </tr>
+<tr class="grupo-sep" data-grupo="Grupo_E"><td colspan="5" class="fase-header">Grupo E</td></tr>
+
+        <tr data-grupo="Grupo_E">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">S20/06 - 22:00</td>
+          <td class="col-nombre">Alemania</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Costa de Marfil</td>
+          <td style="color:#64748b;font-size:0.75rem;">BMO Field, Toronto, Canadá</td>
+        </tr>
+
+        <tr data-grupo="Grupo_E">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">D21/06 - 02:00</td>
+          <td class="col-nombre">Ecuador</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Curaçao</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio Kansas City, Kansas, EEUU</td>
+        </tr>
+<tr class="grupo-sep" data-grupo="Grupo_F"><td colspan="5" class="fase-header">Grupo F</td></tr>
+
+        <tr data-grupo="Grupo_F">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">D21/06 - 06:00</td>
+          <td class="col-nombre">Túnez</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Japón</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio BBVA, Monterrey, México</td>
+        </tr>
+<tr class="grupo-sep" data-grupo="Grupo_H"><td colspan="5" class="fase-header">Grupo H</td></tr>
+
+        <tr data-grupo="Grupo_H">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">D21/06 - 18:00</td>
+          <td class="col-nombre">España</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Arabia Saudí</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio Mercedes Benz, Atlanta, EEUU</td>
+        </tr>
+<tr class="grupo-sep" data-grupo="Grupo_G"><td colspan="5" class="fase-header">Grupo G</td></tr>
+
+        <tr data-grupo="Grupo_G">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">D21/06 - 21:00</td>
+          <td class="col-nombre">Bélgica</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">RI de Irán</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio SoFi, Los Ángeles, EEUU</td>
+        </tr>
+<tr class="grupo-sep" data-grupo="Grupo_H"><td colspan="5" class="fase-header">Grupo H</td></tr>
+
+        <tr data-grupo="Grupo_H">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">L22/06 - 00:00</td>
+          <td class="col-nombre">Uruguay</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Cabo Verde</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio Hard Rock, Miami, EEUU</td>
+        </tr>
+<tr class="grupo-sep" data-grupo="Grupo_G"><td colspan="5" class="fase-header">Grupo G</td></tr>
+
+        <tr data-grupo="Grupo_G">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">L22/06 - 03:00</td>
+          <td class="col-nombre">Nueva Zelanda</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Egipto</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio BC Place, Vancouver, Canadá</td>
+        </tr>
+<tr class="grupo-sep" data-grupo="Grupo_J"><td colspan="5" class="fase-header">Grupo J</td></tr>
+
+        <tr data-grupo="Grupo_J">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">L22/06 - 19:00</td>
+          <td class="col-nombre">Argentina</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Austria</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio AT&T, Dallas, EEUU</td>
+        </tr>
+<tr class="grupo-sep" data-grupo="Grupo_I"><td colspan="5" class="fase-header">Grupo I</td></tr>
+
+        <tr data-grupo="Grupo_I">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">L22/06 - 23:00</td>
+          <td class="col-nombre">Francia</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Iraq</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio Lincoln Financial Field, Filadelfia, EEUU</td>
+        </tr>
+
+        <tr data-grupo="Grupo_I">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">M23/06 - 02:00</td>
+          <td class="col-nombre">Noruega</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Senegal</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio Metlife, Nueva Jersey, EEUU</td>
+        </tr>
+<tr class="grupo-sep" data-grupo="Grupo_J"><td colspan="5" class="fase-header">Grupo J</td></tr>
+
+        <tr data-grupo="Grupo_J">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">M23/06 - 05:00</td>
+          <td class="col-nombre">Jordania</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Argelia</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio Levi's, California, EEUU</td>
+        </tr>
+<tr class="grupo-sep" data-grupo="Grupo_K"><td colspan="5" class="fase-header">Grupo K</td></tr>
+
+        <tr data-grupo="Grupo_K">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">M23/06 - 19:00</td>
+          <td class="col-nombre">Portugal</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Uzbequistán</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio de Houston, Texas, EEUU</td>
+        </tr>
+<tr class="grupo-sep" data-grupo="Grupo_L"><td colspan="5" class="fase-header">Grupo L</td></tr>
+
+        <tr data-grupo="Grupo_L">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">M23/06 - 22:00</td>
+          <td class="col-nombre">Inglaterra</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Ghana</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio Gillette, Boston, EEUU</td>
+        </tr>
+
+        <tr data-grupo="Grupo_L">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">X24/06 - 01:00</td>
+          <td class="col-nombre">Panamá</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Croacia</td>
+          <td style="color:#64748b;font-size:0.75rem;">BMO Field, Toronto, Canadá</td>
+        </tr>
+<tr class="grupo-sep" data-grupo="Grupo_K"><td colspan="5" class="fase-header">Grupo K</td></tr>
+
+        <tr data-grupo="Grupo_K">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">X24/06 - 04:00</td>
+          <td class="col-nombre">Colombia</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">RD Congo</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio Akron, Guadalajara, México</td>
+        </tr>
+<tr class="grupo-sep" data-grupo="Grupo_B"><td colspan="5" class="fase-header">Grupo B</td></tr>
+
+        <tr data-grupo="Grupo_B">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">X24/06 - 21:00</td>
+          <td class="col-nombre">Suiza</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Canadá</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio BC Place, Vancouver, Canadá</td>
+        </tr>
+
+        <tr data-grupo="Grupo_B">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">X24/06 - 21:00</td>
+          <td class="col-nombre">Bosnia y Herzegovina</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Qatar</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio Lumen Field, Seattle, EEUU</td>
+        </tr>
+<tr class="grupo-sep" data-grupo="Grupo_C"><td colspan="5" class="fase-header">Grupo C</td></tr>
+
+        <tr data-grupo="Grupo_C">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">J25/06 - 00:00</td>
+          <td class="col-nombre">Escocia</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Brasil</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio Hard Rock, Miami, EEUU</td>
+        </tr>
+
+        <tr data-grupo="Grupo_C">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">J25/06 - 00:00</td>
+          <td class="col-nombre">Marruecos</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Haití</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio Mercedes Benz, Atlanta, EEUU</td>
+        </tr>
+<tr class="grupo-sep" data-grupo="Grupo_A"><td colspan="5" class="fase-header">Grupo A</td></tr>
+
+        <tr data-grupo="Grupo_A">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">J25/06 - 03:00</td>
+          <td class="col-nombre">República Checa</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">México</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio Azteca, C. de México, México</td>
+        </tr>
+
+        <tr data-grupo="Grupo_A">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">J25/06 - 03:00</td>
+          <td class="col-nombre">Sudáfrica</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">República de Corea</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio BBVA, Monterrey, México</td>
+        </tr>
+<tr class="grupo-sep" data-grupo="Grupo_E"><td colspan="5" class="fase-header">Grupo E</td></tr>
+
+        <tr data-grupo="Grupo_E">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">J25/06 - 22:00</td>
+          <td class="col-nombre">Curaçao</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Costa de Marfil</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio Lincoln Financial Field, Filadelfia, EEUU</td>
+        </tr>
+
+        <tr data-grupo="Grupo_E">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">J25/06 - 22:00</td>
+          <td class="col-nombre">Ecuador</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Alemania</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio Metlife, Nueva Jersey, EEUU</td>
+        </tr>
+<tr class="grupo-sep" data-grupo="Grupo_F"><td colspan="5" class="fase-header">Grupo F</td></tr>
+
+        <tr data-grupo="Grupo_F">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">V26/06 - 01:00</td>
+          <td class="col-nombre">Japón</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Suecia</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio AT&T, Dallas, EEUU</td>
+        </tr>
+
+        <tr data-grupo="Grupo_F">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">V26/06 - 01:00</td>
+          <td class="col-nombre">Túnez</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Países Bajos</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio Kansas City, Kansas, EEUU</td>
+        </tr>
+<tr class="grupo-sep" data-grupo="Grupo_D"><td colspan="5" class="fase-header">Grupo D</td></tr>
+
+        <tr data-grupo="Grupo_D">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">V26/06 - 04:00</td>
+          <td class="col-nombre">Turquía</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Estados Unidos</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio SoFi, Los Ángeles, EEUU</td>
+        </tr>
+
+        <tr data-grupo="Grupo_D">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">V26/06 - 04:00</td>
+          <td class="col-nombre">Paraguay</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Australia</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio Levi's, California, EEUU</td>
+        </tr>
+<tr class="grupo-sep" data-grupo="Grupo_I"><td colspan="5" class="fase-header">Grupo I</td></tr>
+
+        <tr data-grupo="Grupo_I">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">V26/06 - 21:00</td>
+          <td class="col-nombre">Noruega</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Francia</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio Gillette, Boston, EEUU</td>
+        </tr>
+
+        <tr data-grupo="Grupo_I">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">V26/06 - 21:00</td>
+          <td class="col-nombre">Senegal</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Iraq</td>
+          <td style="color:#64748b;font-size:0.75rem;">BMO Field, Toronto, Canadá</td>
+        </tr>
+<tr class="grupo-sep" data-grupo="Grupo_H"><td colspan="5" class="fase-header">Grupo H</td></tr>
+
+        <tr data-grupo="Grupo_H">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">S27/06 - 02:00</td>
+          <td class="col-nombre">Cabo Verde</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Arabia Saudí</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio de Houston, Texas, EEUU</td>
+        </tr>
+
+        <tr data-grupo="Grupo_H">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">S27/06 - 02:00</td>
+          <td class="col-nombre">Uruguay</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">España</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio Akron, Guadalajara, México</td>
+        </tr>
+<tr class="grupo-sep" data-grupo="Grupo_G"><td colspan="5" class="fase-header">Grupo G</td></tr>
+
+        <tr data-grupo="Grupo_G">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">S27/06 - 05:00</td>
+          <td class="col-nombre">Egipto</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">RI de Irán</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio Lumen Field, Seattle, EEUU</td>
+        </tr>
+
+        <tr data-grupo="Grupo_G">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">S27/06 - 05:00</td>
+          <td class="col-nombre">Nueva Zelanda</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Bélgica</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio BC Place, Vancouver, Canadá</td>
+        </tr>
+<tr class="grupo-sep" data-grupo="Grupo_L"><td colspan="5" class="fase-header">Grupo L</td></tr>
+
+        <tr data-grupo="Grupo_L">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">S27/06 - 23:00</td>
+          <td class="col-nombre">Panamá</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Inglaterra</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio Metlife, Nueva Jersey, EEUU</td>
+        </tr>
+
+        <tr data-grupo="Grupo_L">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">S27/06 - 23:00</td>
+          <td class="col-nombre">Croacia</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Ghana</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio Lincoln Financial Field, Filadelfia, EEUU</td>
+        </tr>
+<tr class="grupo-sep" data-grupo="Grupo_K"><td colspan="5" class="fase-header">Grupo K</td></tr>
+
+        <tr data-grupo="Grupo_K">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">D28/06 - 01:30</td>
+          <td class="col-nombre">Colombia</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Portugal</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio Hard Rock, Miami, EEUU</td>
+        </tr>
+
+        <tr data-grupo="Grupo_K">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">D28/06 - 01:30</td>
+          <td class="col-nombre">RD Congo</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Uzbequistán</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio Mercedes Benz, Atlanta, EEUU</td>
+        </tr>
+<tr class="grupo-sep" data-grupo="Grupo_J"><td colspan="5" class="fase-header">Grupo J</td></tr>
+
+        <tr data-grupo="Grupo_J">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">D28/06 - 04:00</td>
+          <td class="col-nombre">Argelia</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Austria</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio Kansas City, Kansas, EEUU</td>
+        </tr>
+
+        <tr data-grupo="Grupo_J">
+          <td style="color:#64748b;font-size:0.8rem;white-space:nowrap;">D28/06 - 04:00</td>
+          <td class="col-nombre">Jordania</td>
+          <td><span class="partido-pendiente">Por jugar</span></td>
+          <td class="col-nombre">Argentina</td>
+          <td style="color:#64748b;font-size:0.75rem;">Estadio AT&T, Dallas, EEUU</td>
+        </tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TABs FASES ELIMINATORIAS (pendientes de datos) -->
+    <div id="tab-doce" style="display:none;"><p style="color:#475569;text-align:center;padding:40px 0;font-style:italic;">Pendiente de disputarse</p></div>
+    <div id="tab-octavos" style="display:none;"><p style="color:#475569;text-align:center;padding:40px 0;font-style:italic;">Pendiente de disputarse</p></div>
+    <div id="tab-cuartos" style="display:none;"><p style="color:#475569;text-align:center;padding:40px 0;font-style:italic;">Pendiente de disputarse</p></div>
+    <div id="tab-semis" style="display:none;"><p style="color:#475569;text-align:center;padding:40px 0;font-style:italic;">Pendiente de disputarse</p></div>
+    <div id="tab-final" style="display:none;"><p style="color:#475569;text-align:center;padding:40px 0;font-style:italic;">Pendiente de disputarse</p></div>
+
+    <!-- TAB: CUESTIONES -->
+    <div id="tab-cuestiones" style="display:none;">
+      <p style="color:#64748b;font-size:0.82rem;margin-bottom:14px;text-align:center;">
+        Preguntas puntuales sobre España y el Mundial (3 pts cada acierto)
+      </p>
+      
+    <div class="tabla-wrapper">
+      <table class="tabla-cuestiones tabla-fase">
+        <thead><tr>
+          <th class="col-nombre" style="width:85%;">Pregunta</th>
+          <th style="width:15%;">Resultado</th>
+        </tr></thead>
+        <tbody><tr><td style='text-align:left;padding:10px 14px;'>¿Nos cruzaremos con Portugal?</td><td style='text-align:center;padding:10px 14px;'><span style="color:#f87171;font-weight:700;">✘ NO</span></td></tr>
+<tr><td style='text-align:left;padding:10px 14px;'>¿Marcará Marc Cucurella algún gol? - No en propia -</td><td style='text-align:center;padding:10px 14px;'><span style="color:#f87171;font-weight:700;">✘ NO</span></td></tr>
+<tr><td style='text-align:left;padding:10px 14px;'>¿Jugará Joan García algún minuto?</td><td style='text-align:center;padding:10px 14px;'><span style="color:#f87171;font-weight:700;">✘ NO</span></td></tr>
+<tr><td style='text-align:left;padding:10px 14px;'>¿Parará Unai Simón algún penalti? - Sin tandas -</td><td style='text-align:center;padding:10px 14px;'><span style="color:#f87171;font-weight:700;">✘ NO</span></td></tr>
+<tr><td style='text-align:left;padding:10px 14px;'>¿Lloverá durante la final?</td><td style='text-align:center;padding:10px 14px;'><span style="color:#f87171;font-weight:700;">✘ NO</span></td></tr>
+<tr><td style='text-align:left;padding:10px 14px;'>¿Pasará España a semifinales?</td><td style='text-align:center;padding:10px 14px;'><span style="color:#f87171;font-weight:700;">✘ NO</span></td></tr>
+<tr><td style='text-align:left;padding:10px 14px;'>¿Eliminarán a España en la tanda de penaltis?</td><td style='text-align:center;padding:10px 14px;'><span style="color:#f87171;font-weight:700;">✘ NO</span></td></tr>
+<tr><td style='text-align:left;padding:10px 14px;'>¿Se marcará España algún gol en propia meta?</td><td style='text-align:center;padding:10px 14px;'><span style="color:#f87171;font-weight:700;">✘ NO</span></td></tr>
+<tr><td style='text-align:left;padding:10px 14px;'>¿Le pitarán a España algún penalti en contra?</td><td style='text-align:center;padding:10px 14px;'><span style="color:#f87171;font-weight:700;">✘ NO</span></td></tr>
+<tr><td style='text-align:left;padding:10px 14px;'>¿Saltará algún espontáneo a algún campo?</td><td style='text-align:center;padding:10px 14px;'><span style="color:#f87171;font-weight:700;">✘ NO</span></td></tr>
+<tr><td style='text-align:left;padding:10px 14px;'>¿Se lesionará algún árbitro durante un partido?</td><td style='text-align:center;padding:10px 14px;'><span style="color:#f87171;font-weight:700;">✘ NO</span></td></tr>
+<tr><td style='text-align:left;padding:10px 14px;'>¿Se lesionará algún jugador en el campo durante el partido en la final?</td><td style='text-align:center;padding:10px 14px;'><span style="color:#f87171;font-weight:700;">✘ NO</span></td></tr>
+<tr><td style='text-align:left;padding:10px 14px;'>¿Será expulsado algún entrenador?</td><td style='text-align:center;padding:10px 14px;'><span style="color:#f87171;font-weight:700;">✘ NO</span></td></tr>
+<tr><td style='text-align:left;padding:10px 14px;'>¿Ganará Qatar algun partido?</td><td style='text-align:center;padding:10px 14px;'><span style="color:#f87171;font-weight:700;">✘ NO</span></td></tr>
+<tr><td style='text-align:left;padding:10px 14px;'>¿Marcará más goles Messi que Cristiano Ronaldo?</td><td style='text-align:center;padding:10px 14px;'><span style="color:#f87171;font-weight:700;">✘ NO</span></td></tr></tbody>
+      </table>
+    </div>
+    </div>
+
+    <!-- TAB: VARIOS -->
+    <div id="tab-varios" style="display:none;">
+      <p style="color:#64748b;font-size:0.82rem;margin-bottom:14px;text-align:center;">
+        Predicciones especiales con puntuación variable
+      </p>
+      
+        <div style="margin-bottom:20px;">
+          <div class="fase-header" style="margin:0 0 8px 0;">Campeón del Mundial</div>
+          <div class="tabla-wrapper">
+            <table class="tabla-varios tabla-fase">
+              <thead><tr>
+                <th class="col-nombre" style="width:70%;">Predicción</th>
+                <th style="width:30%;">Resultado</th>
+              </tr></thead>
+              <tbody><tr><td style='text-align:left;color:#94a3b8;font-size:0.85rem;padding:9px 14px;'>Campeón 1ª opción</td><td style='text-align:center;padding:9px 14px;'><span style="color:#475569;font-style:italic;">Pendiente</span></td></tr></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div style="margin-bottom:20px;">
+          <div class="fase-header" style="margin:0 0 8px 0;">Pichichi</div>
+          <div class="tabla-wrapper">
+            <table class="tabla-varios tabla-fase">
+              <thead><tr>
+                <th class="col-nombre" style="width:70%;">Predicción</th>
+                <th style="width:30%;">Resultado</th>
+              </tr></thead>
+              <tbody><tr><td style='text-align:left;color:#94a3b8;font-size:0.85rem;padding:9px 14px;'>Pichichi 1ª opción</td><td style='text-align:center;padding:9px 14px;'><span style="color:#fbbf24;font-weight:600;">Folarin Balogun</span></td></tr></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div style="margin-bottom:20px;">
+          <div class="fase-header" style="margin:0 0 8px 0;">Mejor jugador</div>
+          <div class="tabla-wrapper">
+            <table class="tabla-varios tabla-fase">
+              <thead><tr>
+                <th class="col-nombre" style="width:70%;">Predicción</th>
+                <th style="width:30%;">Resultado</th>
+              </tr></thead>
+              <tbody><tr><td style='text-align:left;color:#94a3b8;font-size:0.85rem;padding:9px 14px;'>Mejor jugador 1ª opción</td><td style='text-align:center;padding:9px 14px;'><span style="color:#475569;font-style:italic;">Pendiente</span></td></tr></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div style="margin-bottom:20px;">
+          <div class="fase-header" style="margin:0 0 8px 0;">Guante de oro</div>
+          <div class="tabla-wrapper">
+            <table class="tabla-varios tabla-fase">
+              <thead><tr>
+                <th class="col-nombre" style="width:70%;">Predicción</th>
+                <th style="width:30%;">Resultado</th>
+              </tr></thead>
+              <tbody><tr><td style='text-align:left;color:#94a3b8;font-size:0.85rem;padding:9px 14px;'>Guante de oro 1ª opción</td><td style='text-align:center;padding:9px 14px;'><span style="color:#475569;font-style:italic;">Pendiente</span></td></tr></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div style="margin-bottom:20px;">
+          <div class="fase-header" style="margin:0 0 8px 0;">Pichichi español</div>
+          <div class="tabla-wrapper">
+            <table class="tabla-varios tabla-fase">
+              <thead><tr>
+                <th class="col-nombre" style="width:70%;">Predicción</th>
+                <th style="width:30%;">Resultado</th>
+              </tr></thead>
+              <tbody><tr><td style='text-align:left;color:#94a3b8;font-size:0.85rem;padding:9px 14px;'>Pichichi español 1ª opción</td><td style='text-align:center;padding:9px 14px;'><span style="color:#475569;font-style:italic;">Pendiente</span></td></tr></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div style="margin-bottom:20px;">
+          <div class="fase-header" style="margin:0 0 8px 0;">Resultado de la final</div>
+          <div class="tabla-wrapper">
+            <table class="tabla-varios tabla-fase">
+              <thead><tr>
+                <th class="col-nombre" style="width:70%;">Predicción</th>
+                <th style="width:30%;">Resultado</th>
+              </tr></thead>
+              <tbody><tr><td style='text-align:left;color:#94a3b8;font-size:0.85rem;padding:9px 14px;'>Resultado final 1ª opción</td><td style='text-align:center;padding:9px 14px;'><span style="color:#475569;font-style:italic;">Pendiente</span></td></tr></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div style="margin-bottom:20px;">
+          <div class="fase-header" style="margin:0 0 8px 0;">Resultados España 1ª F.</div>
+          <div class="tabla-wrapper">
+            <table class="tabla-varios tabla-fase">
+              <thead><tr>
+                <th class="col-nombre" style="width:70%;">Predicción</th>
+                <th style="width:30%;">Resultado</th>
+              </tr></thead>
+              <tbody><tr><td style='text-align:left;color:#94a3b8;font-size:0.85rem;padding:9px 14px;'>España vs Cabo Verde</td><td style='text-align:center;padding:9px 14px;'><span style="color:#475569;font-style:italic;">Pendiente</span></td></tr>
+<tr><td style='text-align:left;color:#94a3b8;font-size:0.85rem;padding:9px 14px;'>España vs Arabia Saudí</td><td style='text-align:center;padding:9px 14px;'><span style="color:#475569;font-style:italic;">Pendiente</span></td></tr>
+<tr><td style='text-align:left;color:#94a3b8;font-size:0.85rem;padding:9px 14px;'>Uruguay vs España</td><td style='text-align:center;padding:9px 14px;'><span style="color:#475569;font-style:italic;">Pendiente</span></td></tr></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div style="margin-bottom:20px;">
+          <div class="fase-header" style="margin:0 0 8px 0;">Estadísticas de goles</div>
+          <div class="tabla-wrapper">
+            <table class="tabla-varios tabla-fase">
+              <thead><tr>
+                <th class="col-nombre" style="width:70%;">Predicción</th>
+                <th style="width:30%;">Resultado</th>
+              </tr></thead>
+              <tbody><tr><td style='text-align:left;color:#94a3b8;font-size:0.85rem;padding:9px 14px;'>Máx. goles en un partido</td><td style='text-align:center;padding:9px 14px;'><span style="color:#fbbf24;font-weight:600;">Mayor número de goles en un partido</span></td></tr>
+<tr><td style='text-align:left;color:#94a3b8;font-size:0.85rem;padding:9px 14px;'>Total goles España</td><td style='text-align:center;padding:9px 14px;'><span style="color:#fbbf24;font-weight:600;">Nº de goles de España (sin tandas de penaltis)</span></td></tr>
+<tr><td style='text-align:left;color:#94a3b8;font-size:0.85rem;padding:9px 14px;'>Goles encajados España</td><td style='text-align:center;padding:9px 14px;'><span style="color:#fbbf24;font-weight:600;">Nº de goles encajados por España</span></td></tr>
+<tr><td style='text-align:left;color:#94a3b8;font-size:0.85rem;padding:9px 14px;'>Mayor goleada</td><td style='text-align:center;padding:9px 14px;'><span style="color:#fbbf24;font-weight:600;">Mayor goleada</span></td></tr></tbody>
+            </table>
+          </div>
+        </div>
+    </div>
+
+    <script>
+    const ALL_TABS = ['partidos','doce','octavos','cuartos','semis','final','cuestiones','varios'];
+    function filtrar(grupo, btn) {
+      document.querySelectorAll('.btn-filtro').forEach(b => b.classList.remove('activo'));
+      btn.classList.add('activo');
+      document.querySelectorAll('#cuerpo-partidos tr').forEach(tr => {
+        if (grupo === 'todos' || tr.dataset.grupo === grupo) tr.style.display = '';
+        else tr.style.display = 'none';
+      });
+    }
+    function cambiarTab(id, btn) {
+      ALL_TABS.forEach(t => {
+        document.getElementById('tab-' + t).style.display = 'none';
+      });
+      document.querySelectorAll('.tab-btn').forEach(b => {
+        b.style.color = '#94a3b8';
+        b.style.borderBottomColor = 'transparent';
+      });
+      document.getElementById('tab-' + id).style.display = '';
+      btn.style.color = '#fbbf24';
+      btn.style.borderBottomColor = '#f59e0b';
+    }
+    </script>
+    
+  </main>
+  <footer>
+    <p>Última actualización: 14/06/2026 14:55</p>
+  </footer>
+</body>
+</html>

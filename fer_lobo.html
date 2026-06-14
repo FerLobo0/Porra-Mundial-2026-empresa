@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Porra de Fer Lobo — Porra Mundial 2026</title>
+  <style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background-color: #0d1b2a;
+    color: #e2e8f0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 50%, #7c2d12 100%);
+    padding: 24px 20px 18px;
+    text-align: center;
+    border-bottom: 3px solid #f59e0b;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+  header h1 {
+    font-size: clamp(1.4rem, 4vw, 2.2rem);
+    color: #fbbf24;
+    letter-spacing: 2px;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+    font-weight: 900;
+  }
+  header p.subtitulo {
+    color: #fca5a5;
+    font-size: 0.85rem;
+    margin-top: 4px;
+    letter-spacing: 1px;
+  }
+
+  /* ── NAV ── */
+  nav {
+    background-color: #1e293b;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    border-bottom: 2px solid #334155;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+  }
+  nav a {
+    color: #cbd5e1;
+    text-decoration: none;
+    padding: 14px 22px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+    transition: background 0.2s, color 0.2s;
+    border-bottom: 3px solid transparent;
+  }
+  nav a:hover, nav a.activo {
+    color: #fbbf24;
+    background-color: #0f172a;
+    border-bottom-color: #f59e0b;
+  }
+
+  /* ── MAIN ── */
+  main {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 32px 16px;
+    flex: 1;
+    width: 100%;
+  }
+
+  h2 {
+    font-size: 1.4rem;
+    color: #fbbf24;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #334155;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  /* ── TABLAS ── */
+  .tabla-wrapper {
+    overflow-x: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #1e293b;
+    font-size: 0.92rem;
+  }
+  thead tr {
+    background: linear-gradient(90deg, #991b1b, #b91c1c);
+  }
+  th {
+    color: #fff;
+    padding: 13px 12px;
+    text-align: center;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  th.col-nombre { text-align: left; }
+  td {
+    padding: 11px 12px;
+    border-bottom: 1px solid #2d3f55;
+    text-align: center;
+    vertical-align: middle;
+  }
+  td.col-nombre { text-align: left; font-weight: 600; }
+  tr:hover td { background-color: #263347; }
+  tr:last-child td { border-bottom: none; }
+
+  /* Fila del TOP 3 */
+  tr.pos-1 td { background-color: rgba(251,191,36,0.12); }
+  tr.pos-2 td { background-color: rgba(148,163,184,0.10); }
+  tr.pos-3 td { background-color: rgba(180,120,80,0.10); }
+  tr.pos-1:hover td { background-color: rgba(251,191,36,0.18); }
+  tr.pos-2:hover td { background-color: rgba(148,163,184,0.15); }
+  tr.pos-3:hover td { background-color: rgba(180,120,80,0.15); }
+
+  /* Celda TOTAL destacada */
+  td.total { font-weight: 800; font-size: 1.05rem; color: #fbbf24; }
+  td.total-cero { color: #64748b; }
+
+  /* ── TARJETAS PARTICIPANTE ── */
+  .grid-participantes {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+    margin-top: 10px;
+  }
+  .card-participante {
+    background: linear-gradient(135deg, #1e293b, #263347);
+    border: 1px solid #334155;
+    border-radius: 12px;
+    padding: 20px 16px;
+    text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .card-participante:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
+  .card-participante a {
+    color: #fbbf24;
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+  .card-participante.sin-porra { opacity: 0.55; }
+  .card-participante.sin-porra span { color: #94a3b8; font-size: 1.05rem; font-weight: 600; }
+  .card-participante .puntos-card {
+    font-size: 2rem;
+    font-weight: 900;
+    color: #fbbf24;
+    line-height: 1;
+    margin: 6px 0 2px;
+  }
+  .card-participante .label-pts { font-size: 0.7rem; color: #64748b; letter-spacing: 1px; text-transform: uppercase; }
+  .card-participante .badge-pos {
+    display: inline-block;
+    font-size: 1.3rem;
+    margin-bottom: 4px;
+  }
+  .tag-pendiente {
+    display: inline-block;
+    background-color: #334155;
+    color: #94a3b8;
+    font-size: 0.7rem;
+    border-radius: 4px;
+    padding: 2px 6px;
+    margin-top: 6px;
+    letter-spacing: 0.5px;
+  }
+
+  /* ── SECCIÓN PORRA INDIVIDUAL ── */
+  .seccion-porra {
+    margin-bottom: 36px;
+  }
+  .seccion-porra h3 {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #f59e0b;
+    padding: 8px 14px;
+    background-color: #1a2a3a;
+    border-left: 4px solid #f59e0b;
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 12px;
+  }
+  .tabla-partidos th { font-size: 0.72rem; }
+  .tabla-partidos td { font-size: 0.85rem; padding: 8px 10px; }
+  .resultado-1  { color: #86efac; font-weight: 700; }
+  .resultado-x  { color: #fbbf24; font-weight: 700; }
+  .resultado-2  { color: #f87171; font-weight: 700; }
+  .grupo-badge {
+    display: inline-block;
+    font-size: 0.7rem;
+    background: #334155;
+    border-radius: 4px;
+    padding: 1px 5px;
+    color: #94a3b8;
+  }
+
+  .tabla-fase th, .tabla-fase td { padding: 9px 12px; }
+  .tabla-cuestiones .respuesta-si  { color: #86efac; font-weight: 700; }
+  .tabla-cuestiones .respuesta-no  { color: #f87171; font-weight: 700; }
+
+  .tabla-varios td:first-child { text-align: left; color: #94a3b8; font-size: 0.82rem; }
+  .tabla-varios td.valor { color: #e2e8f0; font-weight: 600; text-align: left; }
+
+  /* ── PARTIDOS (resultados.html) ── */
+  .filtro-grupo {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+    justify-content: center;
+  }
+  .btn-filtro {
+    background: #1e293b;
+    border: 1px solid #334155;
+    color: #94a3b8;
+    padding: 6px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-family: inherit;
+    transition: all 0.2s;
+  }
+  .btn-filtro:hover, .btn-filtro.activo {
+    background: #991b1b;
+    border-color: #f59e0b;
+    color: #fbbf24;
+  }
+  .partido-pendiente { color: #475569; font-style: italic; }
+  .partido-jugado { color: #86efac; font-weight: 600; }
+  .resultado-partido { font-size: 1rem; font-weight: 800; color: #fbbf24; letter-spacing: 1px; }
+  .fase-header {
+    background: linear-gradient(90deg, #1a2a3a, #1e293b);
+    color: #f59e0b;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 8px 14px;
+    border-left: 3px solid #f59e0b;
+    margin: 24px 0 10px;
+    border-radius: 0 6px 6px 0;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background-color: #0f172a;
+    border-top: 1px solid #1e293b;
+    text-align: center;
+    padding: 16px;
+    color: #475569;
+    font-size: 0.8rem;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 640px) {
+    nav a { padding: 12px 14px; font-size: 0.82rem; }
+    table { font-size: 0.82rem; }
+    th, td { padding: 8px 6px; }
+    main { padding: 20px 10px; }
+  }
+</style>
+</head>
+<body>
+  <header>
+    <h1>🏆 PORRA MUNDIAL 2026 🏆</h1>
+    <p class="subtitulo">USA · CANADA · MEXICO</p>
+  </header>
+  <nav>
+    <a href="index.html" class="">🏆 Clasificación</a>
+<a href="resultados.html" class="">⚽ Resultados</a>
+<a href="participantes.html" class="">👥 Participantes</a>
+<a href="normas.html" class="">📋 Normas</a>
+  </nav>
+  <main>
+    
+    
+    <h2 style="margin-bottom:20px;">⚽ Porra de Fer Lobo</h2>
+    <div style="background:#1e293b;border:1px solid #334155;border-radius:12px;
+                padding:16px 20px;margin-bottom:24px;">
+      <div style="display:flex;align-items:center;flex-wrap:wrap;gap:10px;justify-content:center;">
+        <div style="text-align:center;padding:10px 16px;background:#991b1b;
+                    border-radius:10px;min-width:72px;">
+          <div style="font-size:2rem;font-weight:900;color:#fbbf24;line-height:1;">21</div>
+          <div style="font-size:0.65rem;color:#fca5a5;letter-spacing:1px;
+                      text-transform:uppercase;margin-top:3px;">TOTAL</div>
+        </div>
+        <a href="javascript:void(0)" onclick="cambiarTabPorra('tab-p-fase1')" style="text-decoration:none;" title="Ver 1ª Fase"><div style="text-align:center;padding:8px 10px;background:#0f172a;border-radius:8px;min-width:62px;cursor:pointer;transition:background 0.15s;" onmouseover="this.style.background='#1e293b'" onmouseout="this.style.background='#0f172a'"><div style="font-size:1.3rem;font-weight:800;color:#fbbf24;line-height:1;">6</div><div style="font-size:0.62rem;color:#475569;letter-spacing:0.5px;text-transform:uppercase;margin-top:2px;">1ª Fase</div></div></a>
+        <a href="javascript:void(0)" onclick="cambiarTabPorra('tab-p-doce')" style="text-decoration:none;" title="Ver 1/16"><div style="text-align:center;padding:8px 10px;background:#0f172a;border-radius:8px;min-width:62px;cursor:pointer;transition:background 0.15s;" onmouseover="this.style.background='#1e293b'" onmouseout="this.style.background='#0f172a'"><div style="font-size:1.3rem;font-weight:800;color:#475569;line-height:1;">0</div><div style="font-size:0.62rem;color:#475569;letter-spacing:0.5px;text-transform:uppercase;margin-top:2px;">1/16</div></div></a>
+        <a href="javascript:void(0)" onclick="cambiarTabPorra('tab-p-octavos')" style="text-decoration:none;" title="Ver Octavos"><div style="text-align:center;padding:8px 10px;background:#0f172a;border-radius:8px;min-width:62px;cursor:pointer;transition:background 0.15s;" onmouseover="this.style.background='#1e293b'" onmouseout="this.style.background='#0f172a'"><div style="font-size:1.3rem;font-weight:800;color:#475569;line-height:1;">0</div><div style="font-size:0.62rem;color:#475569;letter-spacing:0.5px;text-transform:uppercase;margin-top:2px;">Octavos</div></div></a>
+        <a href="javascript:void(0)" onclick="cambiarTabPorra('tab-p-cuartos')" style="text-decoration:none;" title="Ver Cuartos"><div style="text-align:center;padding:8px 10px;background:#0f172a;border-radius:8px;min-width:62px;cursor:pointer;transition:background 0.15s;" onmouseover="this.style.background='#1e293b'" onmouseout="this.style.background='#0f172a'"><div style="font-size:1.3rem;font-weight:800;color:#475569;line-height:1;">0</div><div style="font-size:0.62rem;color:#475569;letter-spacing:0.5px;text-transform:uppercase;margin-top:2px;">Cuartos</div></div></a>
+        <a href="javascript:void(0)" onclick="cambiarTabPorra('tab-p-semis')" style="text-decoration:none;" title="Ver Semis"><div style="text-align:center;padding:8px 10px;background:#0f172a;border-radius:8px;min-width:62px;cursor:pointer;transition:background 0.15s;" onmouseover="this.style.background='#1e293b'" onmouseout="this.style.background='#0f172a'"><div style="font-size:1.3rem;font-weight:800;color:#475569;line-height:1;">0</div><div style="font-size:0.62rem;color:#475569;letter-spacing:0.5px;text-transform:uppercase;margin-top:2px;">Semis</div></div></a>
+        <a href="javascript:void(0)" onclick="cambiarTabPorra('tab-p-final')" style="text-decoration:none;" title="Ver Final"><div style="text-align:center;padding:8px 10px;background:#0f172a;border-radius:8px;min-width:62px;cursor:pointer;transition:background 0.15s;" onmouseover="this.style.background='#1e293b'" onmouseout="this.style.background='#0f172a'"><div style="font-size:1.3rem;font-weight:800;color:#475569;line-height:1;">0</div><div style="font-size:0.62rem;color:#475569;letter-spacing:0.5px;text-transform:uppercase;margin-top:2px;">Final</div></div></a>
+        <a href="javascript:void(0)" onclick="cambiarTabPorra('tab-p-cuestiones')" style="text-decoration:none;" title="Ver Cuestiones"><div style="text-align:center;padding:8px 10px;background:#0f172a;border-radius:8px;min-width:62px;cursor:pointer;transition:background 0.15s;" onmouseover="this.style.background='#1e293b'" onmouseout="this.style.background='#0f172a'"><div style="font-size:1.3rem;font-weight:800;color:#fbbf24;line-height:1;">15</div><div style="font-size:0.62rem;color:#475569;letter-spacing:0.5px;text-transform:uppercase;margin-top:2px;">Cuestiones</div></div></a>
+        <a href="javascript:void(0)" onclick="cambiarTabPorra('tab-p-varios')" style="text-decoration:none;" title="Ver Varios"><div style="text-align:center;padding:8px 10px;background:#0f172a;border-radius:8px;min-width:62px;cursor:pointer;transition:background 0.15s;" onmouseover="this.style.background='#1e293b'" onmouseout="this.style.background='#0f172a'"><div style="font-size:1.3rem;font-weight:800;color:#475569;line-height:1;">0</div><div style="font-size:0.62rem;color:#475569;letter-spacing:0.5px;text-transform:uppercase;margin-top:2px;">Varios</div></div></a>
+      </div>
+      <p style="text-align:center;color:#475569;font-size:0.75rem;margin-top:10px;">
+        Toca un apartado para ir directamente a sus predicciones
+      </p>
+    </div>
+    
+    <div style="display:flex;flex-wrap:wrap;gap:0;margin-bottom:20px;
+                border-bottom:2px solid #334155;overflow-x:auto;">
+      <button class="tab-btn-p tab-p-activo" onclick="cambiarTabPorra('tab-p-fase1')" id="btn-tab-p-fase1" style="padding:9px 14px;background:none;border:none;color:#fbbf24;font-weight:700;font-size:0.82rem;cursor:pointer;font-family:inherit;border-bottom:3px solid #f59e0b;margin-bottom:-2px;white-space:nowrap;">⚽ 1ª Fase</button>
+<button class="tab-btn-p " onclick="cambiarTabPorra('tab-p-doce')" id="btn-tab-p-doce" style="padding:9px 14px;background:none;border:none;color:#94a3b8;font-weight:700;font-size:0.82rem;cursor:pointer;font-family:inherit;border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap;">🔟 1/16</button>
+<button class="tab-btn-p " onclick="cambiarTabPorra('tab-p-octavos')" id="btn-tab-p-octavos" style="padding:9px 14px;background:none;border:none;color:#94a3b8;font-weight:700;font-size:0.82rem;cursor:pointer;font-family:inherit;border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap;">8️⃣ Octavos</button>
+<button class="tab-btn-p " onclick="cambiarTabPorra('tab-p-cuartos')" id="btn-tab-p-cuartos" style="padding:9px 14px;background:none;border:none;color:#94a3b8;font-weight:700;font-size:0.82rem;cursor:pointer;font-family:inherit;border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap;">4️⃣ Cuartos</button>
+<button class="tab-btn-p " onclick="cambiarTabPorra('tab-p-semis')" id="btn-tab-p-semis" style="padding:9px 14px;background:none;border:none;color:#94a3b8;font-weight:700;font-size:0.82rem;cursor:pointer;font-family:inherit;border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap;">2️⃣ Semis</button>
+<button class="tab-btn-p " onclick="cambiarTabPorra('tab-p-final')" id="btn-tab-p-final" style="padding:9px 14px;background:none;border:none;color:#94a3b8;font-weight:700;font-size:0.82rem;cursor:pointer;font-family:inherit;border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap;">🏆 Final</button>
+<button class="tab-btn-p " onclick="cambiarTabPorra('tab-p-cuestiones')" id="btn-tab-p-cuestiones" style="padding:9px 14px;background:none;border:none;color:#94a3b8;font-weight:700;font-size:0.82rem;cursor:pointer;font-family:inherit;border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap;">❓ Cuestiones</button>
+<button class="tab-btn-p " onclick="cambiarTabPorra('tab-p-varios')" id="btn-tab-p-varios" style="padding:9px 14px;background:none;border:none;color:#94a3b8;font-weight:700;font-size:0.82rem;cursor:pointer;font-family:inherit;border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap;">🎯 Varios</button>
+    </div>
+    
+    <div id="tab-p-fase1">
+      <div class="seccion-porra">
+        <h3>1ª Fase — Pronósticos (1 = local, X = empate, 2 = visitante)</h3>
+        <div class="tabla-wrapper">
+          <table class="tabla-partidos tabla-fase">
+            <thead><tr>
+              <th class="col-nombre">Local</th><th>Pronóstico</th>
+              <th class="col-nombre">Visitante</th><th>Grupo</th>
+            </tr></thead>
+            <tbody><tr><td>México</td><td class='resultado-1'>1</td><td>Sudáfrica</td><td><span class='grupo-badge'>Grupo A</span></td></tr>
+<tr><td>República de Corea</td><td class='resultado-2'>2</td><td>República Checa</td><td><span class='grupo-badge'>Grupo A</span></td></tr>
+<tr><td>Canadá</td><td class='resultado-1'>1</td><td>Bosnia y Herzegovina</td><td><span class='grupo-badge'>Grupo B</span></td></tr>
+<tr><td>Estados Unidos</td><td class='resultado-1'>1</td><td>Paraguay</td><td><span class='grupo-badge'>Grupo D</span></td></tr>
+<tr><td>Qatar</td><td class='resultado-2'>2</td><td>Suiza</td><td><span class='grupo-badge'>Grupo B</span></td></tr>
+<tr><td>Brasil</td><td class='resultado-2'>2</td><td>Marruecos</td><td><span class='grupo-badge'>Grupo C</span></td></tr>
+<tr><td>Haití</td><td class='resultado-2'>2</td><td>Escocia</td><td><span class='grupo-badge'>Grupo C</span></td></tr>
+<tr><td>Australia</td><td class='resultado-2'>2</td><td>Turquía</td><td><span class='grupo-badge'>Grupo D</span></td></tr>
+<tr><td>Alemania</td><td class='resultado-1'>1</td><td>Curaçao</td><td><span class='grupo-badge'>Grupo E</span></td></tr>
+<tr><td>Países Bajos</td><td class='resultado-1'>1</td><td>Japón</td><td><span class='grupo-badge'>Grupo F</span></td></tr>
+<tr><td>Costa de Marfil</td><td class='resultado-1'>1</td><td>Ecuador</td><td><span class='grupo-badge'>Grupo E</span></td></tr>
+<tr><td>Suecia</td><td class='resultado-1'>1</td><td>Túnez</td><td><span class='grupo-badge'>Grupo F</span></td></tr>
+<tr><td>España</td><td class='resultado-1'>1</td><td>Cabo Verde</td><td><span class='grupo-badge'>Grupo H</span></td></tr>
+<tr><td>Bélgica</td><td class='resultado-x'>X</td><td>Egipto</td><td><span class='grupo-badge'>Grupo G</span></td></tr>
+<tr><td>Arabia Saudí</td><td class='resultado-2'>2</td><td>Uruguay</td><td><span class='grupo-badge'>Grupo H</span></td></tr>
+<tr><td>RI de Irán</td><td class='resultado-x'>X</td><td>Nueva Zelanda</td><td><span class='grupo-badge'>Grupo G</span></td></tr>
+<tr><td>Francia</td><td class='resultado-1'>1</td><td>Senegal</td><td><span class='grupo-badge'>Grupo I</span></td></tr>
+<tr><td>Iraq</td><td class='resultado-2'>2</td><td>Noruega</td><td><span class='grupo-badge'>Grupo I</span></td></tr>
+<tr><td>Argentina</td><td class='resultado-1'>1</td><td>Argelia</td><td><span class='grupo-badge'>Grupo J</span></td></tr>
+<tr><td>Austria</td><td class='resultado-1'>1</td><td>Jordania</td><td><span class='grupo-badge'>Grupo J</span></td></tr>
+<tr><td>Portugal</td><td class='resultado-1'>1</td><td>RD Congo</td><td><span class='grupo-badge'>Grupo K</span></td></tr>
+<tr><td>Inglaterra</td><td class='resultado-x'>X</td><td>Croacia</td><td><span class='grupo-badge'>Grupo L</span></td></tr>
+<tr><td>Ghana</td><td class='resultado-1'>1</td><td>Panamá</td><td><span class='grupo-badge'>Grupo L</span></td></tr>
+<tr><td>Uzbequistán</td><td class='resultado-2'>2</td><td>Colombia</td><td><span class='grupo-badge'>Grupo K</span></td></tr>
+<tr><td>República Checa</td><td class='resultado-x'>X</td><td>Sudáfrica</td><td><span class='grupo-badge'>Grupo A</span></td></tr>
+<tr><td>Suiza</td><td class='resultado-1'>1</td><td>Bosnia y Herzegovina</td><td><span class='grupo-badge'>Grupo B</span></td></tr>
+<tr><td>Canadá</td><td class='resultado-1'>1</td><td>Qatar</td><td><span class='grupo-badge'>Grupo B</span></td></tr>
+<tr><td>México</td><td class='resultado-2'>2</td><td>República de Corea</td><td><span class='grupo-badge'>Grupo A</span></td></tr>
+<tr><td>Estados Unidos</td><td class='resultado-1'>1</td><td>Australia</td><td><span class='grupo-badge'>Grupo D</span></td></tr>
+<tr><td>Escocia</td><td class='resultado-2'>2</td><td>Marruecos</td><td><span class='grupo-badge'>Grupo C</span></td></tr>
+<tr><td>Brasil</td><td class='resultado-1'>1</td><td>Haití</td><td><span class='grupo-badge'>Grupo C</span></td></tr>
+<tr><td>Turquía</td><td class='resultado-1'>1</td><td>Paraguay</td><td><span class='grupo-badge'>Grupo D</span></td></tr>
+<tr><td>Países Bajos</td><td class='resultado-x'>X</td><td>Suecia</td><td><span class='grupo-badge'>Grupo F</span></td></tr>
+<tr><td>Alemania</td><td class='resultado-1'>1</td><td>Costa de Marfil</td><td><span class='grupo-badge'>Grupo E</span></td></tr>
+<tr><td>Ecuador</td><td class='resultado-1'>1</td><td>Curaçao</td><td><span class='grupo-badge'>Grupo E</span></td></tr>
+<tr><td>Túnez</td><td class='resultado-2'>2</td><td>Japón</td><td><span class='grupo-badge'>Grupo F</span></td></tr>
+<tr><td>España</td><td class='resultado-1'>1</td><td>Arabia Saudí</td><td><span class='grupo-badge'>Grupo H</span></td></tr>
+<tr><td>Bélgica</td><td class='resultado-1'>1</td><td>RI de Irán</td><td><span class='grupo-badge'>Grupo G</span></td></tr>
+<tr><td>Uruguay</td><td class='resultado-1'>1</td><td>Cabo Verde</td><td><span class='grupo-badge'>Grupo H</span></td></tr>
+<tr><td>Nueva Zelanda</td><td class='resultado-2'>2</td><td>Egipto</td><td><span class='grupo-badge'>Grupo G</span></td></tr>
+<tr><td>Argentina</td><td class='resultado-1'>1</td><td>Austria</td><td><span class='grupo-badge'>Grupo J</span></td></tr>
+<tr><td>Francia</td><td class='resultado-1'>1</td><td>Iraq</td><td><span class='grupo-badge'>Grupo I</span></td></tr>
+<tr><td>Noruega</td><td class='resultado-2'>2</td><td>Senegal</td><td><span class='grupo-badge'>Grupo I</span></td></tr>
+<tr><td>Jordania</td><td class='resultado-x'>X</td><td>Argelia</td><td><span class='grupo-badge'>Grupo J</span></td></tr>
+<tr><td>Portugal</td><td class='resultado-1'>1</td><td>Uzbequistán</td><td><span class='grupo-badge'>Grupo K</span></td></tr>
+<tr><td>Inglaterra</td><td class='resultado-1'>1</td><td>Ghana</td><td><span class='grupo-badge'>Grupo L</span></td></tr>
+<tr><td>Panamá</td><td class='resultado-2'>2</td><td>Croacia</td><td><span class='grupo-badge'>Grupo L</span></td></tr>
+<tr><td>Colombia</td><td class='resultado-1'>1</td><td>RD Congo</td><td><span class='grupo-badge'>Grupo K</span></td></tr>
+<tr><td>Suiza</td><td class='resultado-1'>1</td><td>Canadá</td><td><span class='grupo-badge'>Grupo B</span></td></tr>
+<tr><td>Bosnia y Herzegovina</td><td class='resultado-x'>X</td><td>Qatar</td><td><span class='grupo-badge'>Grupo B</span></td></tr>
+<tr><td>Escocia</td><td class='resultado-2'>2</td><td>Brasil</td><td><span class='grupo-badge'>Grupo C</span></td></tr>
+<tr><td>Marruecos</td><td class='resultado-1'>1</td><td>Haití</td><td><span class='grupo-badge'>Grupo C</span></td></tr>
+<tr><td>República Checa</td><td class='resultado-2'>2</td><td>México</td><td><span class='grupo-badge'>Grupo A</span></td></tr>
+<tr><td>Sudáfrica</td><td class='resultado-x'>X</td><td>República de Corea</td><td><span class='grupo-badge'>Grupo A</span></td></tr>
+<tr><td>Curaçao</td><td class='resultado-2'>2</td><td>Costa de Marfil</td><td><span class='grupo-badge'>Grupo E</span></td></tr>
+<tr><td>Ecuador</td><td class='resultado-2'>2</td><td>Alemania</td><td><span class='grupo-badge'>Grupo E</span></td></tr>
+<tr><td>Japón</td><td class='resultado-2'>2</td><td>Suecia</td><td><span class='grupo-badge'>Grupo F</span></td></tr>
+<tr><td>Túnez</td><td class='resultado-2'>2</td><td>Países Bajos</td><td><span class='grupo-badge'>Grupo F</span></td></tr>
+<tr><td>Turquía</td><td class='resultado-2'>2</td><td>Estados Unidos</td><td><span class='grupo-badge'>Grupo D</span></td></tr>
+<tr><td>Paraguay</td><td class='resultado-x'>X</td><td>Australia</td><td><span class='grupo-badge'>Grupo D</span></td></tr>
+<tr><td>Noruega</td><td class='resultado-2'>2</td><td>Francia</td><td><span class='grupo-badge'>Grupo I</span></td></tr>
+<tr><td>Senegal</td><td class='resultado-1'>1</td><td>Iraq</td><td><span class='grupo-badge'>Grupo I</span></td></tr>
+<tr><td>Cabo Verde</td><td class='resultado-x'>X</td><td>Arabia Saudí</td><td><span class='grupo-badge'>Grupo H</span></td></tr>
+<tr><td>Uruguay</td><td class='resultado-2'>2</td><td>España</td><td><span class='grupo-badge'>Grupo H</span></td></tr>
+<tr><td>Egipto</td><td class='resultado-1'>1</td><td>RI de Irán</td><td><span class='grupo-badge'>Grupo G</span></td></tr>
+<tr><td>Nueva Zelanda</td><td class='resultado-2'>2</td><td>Bélgica</td><td><span class='grupo-badge'>Grupo G</span></td></tr>
+<tr><td>Panamá</td><td class='resultado-2'>2</td><td>Inglaterra</td><td><span class='grupo-badge'>Grupo L</span></td></tr>
+<tr><td>Croacia</td><td class='resultado-1'>1</td><td>Ghana</td><td><span class='grupo-badge'>Grupo L</span></td></tr>
+<tr><td>Colombia</td><td class='resultado-2'>2</td><td>Portugal</td><td><span class='grupo-badge'>Grupo K</span></td></tr>
+<tr><td>RD Congo</td><td class='resultado-x'>X</td><td>Uzbequistán</td><td><span class='grupo-badge'>Grupo K</span></td></tr>
+<tr><td>Argelia</td><td class='resultado-2'>2</td><td>Austria</td><td><span class='grupo-badge'>Grupo J</span></td></tr>
+<tr><td>Jordania</td><td class='resultado-2'>2</td><td>Argentina</td><td><span class='grupo-badge'>Grupo J</span></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    
+        <div id="tab-p-doce" style="display:none;">
+          <div class="seccion-porra">
+            <h3>Dieciseisavos de Final</h3>
+            <div class="tabla-wrapper">
+              <table class="tabla-fase">
+                <thead><tr><th>Cruce</th><th>Clasificado A</th><th></th><th>Clasificado B</th></tr></thead>
+                <tbody><tr><td style='color:#64748b;font-size:0.75rem;'>DF1= 2º A - 2º B</td><td>República Checa</td><td style='color:#64748b;'>vs</td><td>Canadá</td></tr>
+<tr><td style='color:#64748b;font-size:0.75rem;'>DF2= 1º E - 3º A/B/C/D/F</td><td>Alemania</td><td style='color:#64748b;'>vs</td><td>México</td></tr>
+<tr><td style='color:#64748b;font-size:0.75rem;'>DF3= 1º F - 2º C</td><td>Países Bajos</td><td style='color:#64748b;'>vs</td><td>Brasil</td></tr>
+<tr><td style='color:#64748b;font-size:0.75rem;'>DF4= 1º C - 2º F</td><td>Marruecos</td><td style='color:#64748b;'>vs</td><td>Suecia</td></tr>
+<tr><td style='color:#64748b;font-size:0.75rem;'>DF5= 1º I - 3º C/D/F/G/H</td><td>Francia</td><td style='color:#64748b;'>vs</td><td>Japón</td></tr>
+<tr><td style='color:#64748b;font-size:0.75rem;'>DF6= 2º E - 2º I</td><td>Ecuador</td><td style='color:#64748b;'>vs</td><td>Senegal</td></tr>
+<tr><td style='color:#64748b;font-size:0.75rem;'>DF7= 1º A - 3º C/E/F/H/I</td><td>México</td><td style='color:#64748b;'>vs</td><td>Costa de Marfil</td></tr>
+<tr><td style='color:#64748b;font-size:0.75rem;'>DF8= 1º L - 3º E/H/I/J/K</td><td>Inglaterra</td><td style='color:#64748b;'>vs</td><td>RD Congo</td></tr>
+<tr><td style='color:#64748b;font-size:0.75rem;'>DF9= 1º D - 3º B/E/F/I/J</td><td>Estados Unidos</td><td style='color:#64748b;'>vs</td><td>Bosnia y Herzegovina</td></tr>
+<tr><td style='color:#64748b;font-size:0.75rem;'>DF10= 1º G - 3º A/E/H/I/J</td><td>Bélgica</td><td style='color:#64748b;'>vs</td><td>República de Corea</td></tr>
+<tr><td style='color:#64748b;font-size:0.75rem;'>DF11= 2º K - 2º L</td><td>Colombia</td><td style='color:#64748b;'>vs</td><td>Croacia</td></tr>
+<tr><td style='color:#64748b;font-size:0.75rem;'>DF12= 1º H - 2º J</td><td>España</td><td style='color:#64748b;'>vs</td><td>Austria</td></tr>
+<tr><td style='color:#64748b;font-size:0.75rem;'>DF13= 1º B - 3º E/F/G/I/J</td><td>Suiza</td><td style='color:#64748b;'>vs</td><td>Noruega</td></tr>
+<tr><td style='color:#64748b;font-size:0.75rem;'>DF14= 1º J - 2º H</td><td>Argentina</td><td style='color:#64748b;'>vs</td><td>Uruguay</td></tr>
+<tr><td style='color:#64748b;font-size:0.75rem;'>DF15= 1º K - 3º D/E/I/J/L</td><td>Portugal</td><td style='color:#64748b;'>vs</td><td>Ghana</td></tr>
+<tr><td style='color:#64748b;font-size:0.75rem;'>DF16= 2º D - 2º G</td><td>Turquía</td><td style='color:#64748b;'>vs</td><td>Egipto</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+    
+        <div id="tab-p-octavos" style="display:none;">
+          <div class="seccion-porra">
+            <h3>Octavos de Final</h3>
+            <div class="tabla-wrapper">
+              <table class="tabla-fase">
+                <thead><tr><th>Cruce</th><th>Clasificado A</th><th></th><th>Clasificado B</th></tr></thead>
+                <tbody><tr><td style='color:#64748b;font-size:0.75rem;'>CRUCE</td><td>OCTAVOS DE FINAL</td><td style='color:#64748b;'>vs</td><td>—</td></tr>
+<tr><td style='color:#64748b;font-size:0.75rem;'>OF1= DF2 - DF5</td><td>Alemania</td><td style='color:#64748b;'>vs</td><td>Francia</td></tr>
+<tr><td style='color:#64748b;font-size:0.75rem;'>OF2= DF1 - DF3</td><td>Canadá</td><td style='color:#64748b;'>vs</td><td>Brasil</td></tr>
+<tr><td style='color:#64748b;font-size:0.75rem;'>OF3= DF4 - DF6</td><td>Marruecos</td><td style='color:#64748b;'>vs</td><td>Ecuador</td></tr>
+<tr><td style='color:#64748b;font-size:0.75rem;'>OF4= DF7 - DF8</td><td>México</td><td style='color:#64748b;'>vs</td><td>Inglaterra</td></tr>
+<tr><td style='color:#64748b;font-size:0.75rem;'>OF5= DF11 - DF12</td><td>Croacia</td><td style='color:#64748b;'>vs</td><td>España</td></tr>
+<tr><td style='color:#64748b;font-size:0.75rem;'>OF6= DF9 - DF10</td><td>Estados Unidos</td><td style='color:#64748b;'>vs</td><td>Bélgica</td></tr>
+<tr><td style='color:#64748b;font-size:0.75rem;'>OF7= DF14 - DF16</td><td>Argentina</td><td style='color:#64748b;'>vs</td><td>Turquía</td></tr>
+<tr><td style='color:#64748b;font-size:0.75rem;'>OF8= DF13 - DF15</td><td>Noruega</td><td style='color:#64748b;'>vs</td><td>Portugal</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+    
+        <div id="tab-p-cuartos" style="display:none;">
+          <div class="seccion-porra">
+            <h3>Cuartos de Final</h3>
+            <div class="tabla-wrapper">
+              <table class="tabla-fase">
+                <thead><tr><th>Cruce</th><th>Clasificado A</th><th></th><th>Clasificado B</th></tr></thead>
+                <tbody><tr><td style='color:#64748b;font-size:0.75rem;'>CRUCE</td><td>CUARTOS DE FINAL</td><td style='color:#64748b;'>vs</td><td>—</td></tr>
+<tr><td style='color:#64748b;font-size:0.75rem;'>CF1= OF1 - OF2</td><td>Francia</td><td style='color:#64748b;'>vs</td><td>Brasil</td></tr>
+<tr><td style='color:#64748b;font-size:0.75rem;'>CF2= OF5 - OF6</td><td>España</td><td style='color:#64748b;'>vs</td><td>Bélgica</td></tr>
+<tr><td style='color:#64748b;font-size:0.75rem;'>CF3= OF3 - OF4</td><td>Marruecos</td><td style='color:#64748b;'>vs</td><td>Inglaterra</td></tr>
+<tr><td style='color:#64748b;font-size:0.75rem;'>CF4= OF7 - OF8</td><td>Argentina</td><td style='color:#64748b;'>vs</td><td>Portugal</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+    
+        <div id="tab-p-semis" style="display:none;">
+          <div class="seccion-porra">
+            <h3>Semifinales</h3>
+            <div class="tabla-wrapper">
+              <table class="tabla-fase">
+                <thead><tr><th>Cruce</th><th>Clasificado A</th><th></th><th>Clasificado B</th></tr></thead>
+                <tbody><tr><td style='color:#64748b;font-size:0.75rem;'>CRUCE</td><td>SEMIFINALES</td><td style='color:#64748b;'>vs</td><td>—</td></tr>
+<tr><td style='color:#64748b;font-size:0.75rem;'>SF1= CF1 - CF2</td><td>Francia</td><td style='color:#64748b;'>vs</td><td>España</td></tr>
+<tr><td style='color:#64748b;font-size:0.75rem;'>SF2= CF3 - CF4</td><td>Inglaterra</td><td style='color:#64748b;'>vs</td><td>Portugal</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+    
+        <div id="tab-p-final" style="display:none;">
+          <div class="seccion-porra">
+            <h3>Final</h3>
+            <div class="tabla-wrapper">
+              <table class="tabla-fase">
+                <thead><tr><th>Cruce</th><th>Clasificado A</th><th></th><th>Clasificado B</th></tr></thead>
+                <tbody><tr><td style='color:#64748b;font-size:0.75rem;'>CRUCE</td><td>FINAL</td><td style='color:#64748b;'>vs</td><td>—</td></tr>
+<tr><td style='color:#64748b;font-size:0.75rem;'>F= SF1 - SF2</td><td>España</td><td style='color:#64748b;'>vs</td><td>Portugal</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+    
+    <div id="tab-p-cuestiones" style="display:none;">
+      <div class="seccion-porra">
+        <h3>Cuestiones</h3>
+        <div class="tabla-wrapper">
+          <table class="tabla-cuestiones tabla-fase">
+            <thead><tr><th class="col-nombre">Pregunta</th><th>Respuesta</th></tr></thead>
+            <tbody><tr><td style='text-align:left'>¿Nos cruzaremos con Portugal?</td><td class='respuesta-si'>SI</td></tr>
+<tr><td style='text-align:left'>¿Marcará Marc Cucurella algún gol? - No en propia -</td><td class='respuesta-no'>NO</td></tr>
+<tr><td style='text-align:left'>¿Jugará Joan García algún minuto?</td><td class='respuesta-si'>SI</td></tr>
+<tr><td style='text-align:left'>¿Parará Unai Simón algún penalti? - Sin tandas -</td><td class='respuesta-si'>SI</td></tr>
+<tr><td style='text-align:left'>¿Lloverá durante la final?</td><td class='respuesta-no'>NO</td></tr>
+<tr><td style='text-align:left'>¿Pasará España a semifinales?</td><td class='respuesta-si'>SI</td></tr>
+<tr><td style='text-align:left'>¿Eliminarán a España en la tanda de penaltis?</td><td class='respuesta-no'>NO</td></tr>
+<tr><td style='text-align:left'>¿Se marcará España algún gol en propia meta?</td><td class='respuesta-no'>NO</td></tr>
+<tr><td style='text-align:left'>¿Le pitarán a España algún penalti en contra?</td><td class='respuesta-si'>SI</td></tr>
+<tr><td style='text-align:left'>¿Saltará algún espontáneo a algún campo?</td><td class='respuesta-si'>SI</td></tr>
+<tr><td style='text-align:left'>¿Se lesionará algún árbitro durante un partido?</td><td class='respuesta-no'>NO</td></tr>
+<tr><td style='text-align:left'>¿Se lesionará algún jugador en el campo durante el partido en la final?</td><td class='respuesta-si'>SI</td></tr>
+<tr><td style='text-align:left'>¿Será expulsado algún entrenador?</td><td class='respuesta-si'>SI</td></tr>
+<tr><td style='text-align:left'>¿Ganará Qatar algun partido?</td><td class='respuesta-no'>NO</td></tr>
+<tr><td style='text-align:left'>¿Marcará más goles Messi que Cristiano Ronaldo?</td><td class='respuesta-si'>SI</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    
+    <div id="tab-p-varios" style="display:none;">
+      <div class="seccion-porra">
+        <h3>Varios</h3>
+        
+        <div style="margin-bottom:18px;">
+          <div class="fase-header" style="margin:0 0 8px 0;">🥇 Campeón del Mundial</div>
+          <div class="tabla-wrapper">
+            <table class="tabla-varios tabla-fase">
+              <thead><tr><th class="col-nombre">Predicción</th><th class="col-nombre">Valor</th></tr></thead>
+              <tbody><tr><td style='text-align:left;color:#94a3b8;font-size:0.85rem;'>Campeón 1ª opción</td><td style='color:#e2e8f0;font-weight:600;'>Portugal</td></tr>
+<tr><td style='text-align:left;color:#94a3b8;font-size:0.85rem;'>Campeón 2ª opción</td><td style='color:#e2e8f0;font-weight:600;'>España</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+        <div style="margin-bottom:18px;">
+          <div class="fase-header" style="margin:0 0 8px 0;">👟 Pichichi</div>
+          <div class="tabla-wrapper">
+            <table class="tabla-varios tabla-fase">
+              <thead><tr><th class="col-nombre">Predicción</th><th class="col-nombre">Valor</th></tr></thead>
+              <tbody><tr><td style='text-align:left;color:#94a3b8;font-size:0.85rem;'>Pichichi 1ª opción</td><td style='color:#e2e8f0;font-weight:600;'>Kylian Mbappé</td></tr>
+<tr><td style='text-align:left;color:#94a3b8;font-size:0.85rem;'>Pichichi 2ª opción</td><td style='color:#e2e8f0;font-weight:600;'>Mikel Oyarzabal</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+        <div style="margin-bottom:18px;">
+          <div class="fase-header" style="margin:0 0 8px 0;">⭐ Mejor jugador</div>
+          <div class="tabla-wrapper">
+            <table class="tabla-varios tabla-fase">
+              <thead><tr><th class="col-nombre">Predicción</th><th class="col-nombre">Valor</th></tr></thead>
+              <tbody><tr><td style='text-align:left;color:#94a3b8;font-size:0.85rem;'>Mejor jugador 1ª opción</td><td style='color:#e2e8f0;font-weight:600;'>Lionel Messi</td></tr>
+<tr><td style='text-align:left;color:#94a3b8;font-size:0.85rem;'>Mejor jugador 2ª opción</td><td style='color:#e2e8f0;font-weight:600;'>Vitinha</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+        <div style="margin-bottom:18px;">
+          <div class="fase-header" style="margin:0 0 8px 0;">🧤 Guante de oro</div>
+          <div class="tabla-wrapper">
+            <table class="tabla-varios tabla-fase">
+              <thead><tr><th class="col-nombre">Predicción</th><th class="col-nombre">Valor</th></tr></thead>
+              <tbody><tr><td style='text-align:left;color:#94a3b8;font-size:0.85rem;'>Guante de oro 1ª opción</td><td style='color:#e2e8f0;font-weight:600;'>Rui Silva</td></tr>
+<tr><td style='text-align:left;color:#94a3b8;font-size:0.85rem;'>Guante de oro 2ª opción</td><td style='color:#e2e8f0;font-weight:600;'>Thibaut Courtois</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+        <div style="margin-bottom:18px;">
+          <div class="fase-header" style="margin:0 0 8px 0;">🇪🇸 Pichichi español</div>
+          <div class="tabla-wrapper">
+            <table class="tabla-varios tabla-fase">
+              <thead><tr><th class="col-nombre">Predicción</th><th class="col-nombre">Valor</th></tr></thead>
+              <tbody><tr><td style='text-align:left;color:#94a3b8;font-size:0.85rem;'>Pichichi español 1ª opción</td><td style='color:#e2e8f0;font-weight:600;'>Mikel Oyarzabal</td></tr>
+<tr><td style='text-align:left;color:#94a3b8;font-size:0.85rem;'>Pichichi español 2ª opción</td><td style='color:#e2e8f0;font-weight:600;'>Ferran Torres</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+        <div style="margin-bottom:18px;">
+          <div class="fase-header" style="margin:0 0 8px 0;">📋 Resultado de la final</div>
+          <div class="tabla-wrapper">
+            <table class="tabla-varios tabla-fase">
+              <thead><tr><th class="col-nombre">Predicción</th><th class="col-nombre">Valor</th></tr></thead>
+              <tbody><tr><td style='text-align:left;color:#94a3b8;font-size:0.85rem;'>Resultado final 1ª opción</td><td style='color:#e2e8f0;font-weight:600;'>1-0</td></tr>
+<tr><td style='text-align:left;color:#94a3b8;font-size:0.85rem;'>Resultado final 2ª opción</td><td style='color:#e2e8f0;font-weight:600;'>2-3</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+        <div style="margin-bottom:18px;">
+          <div class="fase-header" style="margin:0 0 8px 0;">🛡️ Resultados España 1ª Fase</div>
+          <div class="tabla-wrapper">
+            <table class="tabla-varios tabla-fase">
+              <thead><tr><th class="col-nombre">Predicción</th><th class="col-nombre">Valor</th></tr></thead>
+              <tbody><tr><td style='text-align:left;color:#94a3b8;font-size:0.85rem;'>España vs Cabo Verde</td><td style='color:#e2e8f0;font-weight:600;'>2</td></tr>
+<tr><td style='text-align:left;color:#94a3b8;font-size:0.85rem;'>España vs Arabia Saudí</td><td style='color:#e2e8f0;font-weight:600;'>3</td></tr>
+<tr><td style='text-align:left;color:#94a3b8;font-size:0.85rem;'>Uruguay vs España</td><td style='color:#e2e8f0;font-weight:600;'>3</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+        <div style="margin-bottom:18px;">
+          <div class="fase-header" style="margin:0 0 8px 0;">🔢 Estadísticas de goles</div>
+          <div class="tabla-wrapper">
+            <table class="tabla-varios tabla-fase">
+              <thead><tr><th class="col-nombre">Predicción</th><th class="col-nombre">Valor</th></tr></thead>
+              <tbody><tr><td style='text-align:left;color:#94a3b8;font-size:0.85rem;'>Máx. goles en un partido</td><td style='color:#e2e8f0;font-weight:600;'>Mayor número de goles en un partido</td></tr>
+<tr><td style='text-align:left;color:#94a3b8;font-size:0.85rem;'>Total goles España</td><td style='color:#e2e8f0;font-weight:600;'>Nº de goles de España (sin tandas de penaltis)</td></tr>
+<tr><td style='text-align:left;color:#94a3b8;font-size:0.85rem;'>Goles encajados España</td><td style='color:#e2e8f0;font-weight:600;'>Nº de goles encajados por España</td></tr>
+<tr><td style='text-align:left;color:#94a3b8;font-size:0.85rem;'>Mayor goleada</td><td style='color:#e2e8f0;font-weight:600;'>Mayor goleada</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p style="text-align:center;margin-top:28px;">
+      <a href="participantes.html" style="color:#f59e0b;font-size:0.85rem;">← Volver a participantes</a>
+    </p>
+
+    <script>
+    const ALL_TABS_P = ["tab-p-fase1", "tab-p-doce", "tab-p-octavos", "tab-p-cuartos", "tab-p-semis", "tab-p-final", "tab-p-cuestiones", "tab-p-varios"];
+    function cambiarTabPorra(id) {
+      ALL_TABS_P.forEach(t => {
+        const el = document.getElementById(t);
+        if (el) el.style.display = 'none';
+        const btn = document.getElementById('btn-' + t);
+        if (btn) { btn.style.color = '#94a3b8'; btn.style.borderBottomColor = 'transparent'; }
+      });
+      const target = document.getElementById(id);
+      if (target) target.style.display = '';
+      const btn = document.getElementById('btn-' + id);
+      if (btn) { btn.style.color = '#fbbf24'; btn.style.borderBottomColor = '#f59e0b'; }
+    }
+    </script>
+    
+  </main>
+  <footer>
+    <p>Última actualización: 14/06/2026 14:55</p>
+  </footer>
+</body>
+</html>
